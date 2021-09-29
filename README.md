@@ -7,7 +7,6 @@
 ```sh
 > mkdir capstone 
 > cd capstone
-> mkdir backend
 ```
 
 ### 2. Creating Virtual Enivornment 
@@ -22,7 +21,7 @@
 
 ### 3. Cloning the Git Repo
 ```sh
-# inside the ./capstone/backend directory
+# inside the ./capstone
 > git init
 > git clone https://github.com/marajput123/WeSource-backend.git
 ```
