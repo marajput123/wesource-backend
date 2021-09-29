@@ -28,7 +28,7 @@
 
 ### 4. Installing dependencies 
 ```sh
-pip install -r requirements.txt 
+> pip install -r requirements.txt 
 ```
 ***
 *Reference -*  [Flask Installation Guide](https://flask.palletsprojects.com/en/2.0.x/installation/#create-an-environment)
