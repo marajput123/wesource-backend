@@ -21,7 +21,7 @@
 
 ### 3. Cloning the Git Repo
 ```sh
-# inside the ./capstone
+# inside the ./capstone directory
 > git init
 > git clone https://github.com/marajput123/WeSource-backend.git
 ```
