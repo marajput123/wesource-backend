@@ -17,5 +17,5 @@ app = Flask(__name__)
 @app.route("/")
 def hello_world():
     
-    dict = {'hello':'world'}
+    dict = {'hello':'world!'}
     return jsonify(dict)
