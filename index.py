@@ -1,12 +1,7 @@
 """ Main app call """
 from flask import Flask, jsonify
 from mongoengine import connect
-from bson.objectid import ObjectId
-from models.Product import Product
-from models.Item import Item
-from models.User import User
-from util.decorators.auth import authenticated
-from util.decorators.errorHandler import MongoErrorHandler, exceptionHandler 
+from util.decorators.errorHandler import exception_handler
 
 
 # Database URL
@@ -18,8 +13,9 @@ connect(host=MONGODB_URL)
 
 app = Flask(__name__)
 
-@app.route("/", methods=["POST","GET"])
-@exceptionHandler
-def index():
-    return jsonify({"hello":"world"})
 
+@app.route("/", methods=["POST", "GET"])
+@exception_handler
+def index():
+    """Index - Mock Route"""
+    return jsonify({"hello": "world"})
