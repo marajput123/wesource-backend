@@ -30,10 +30,66 @@
 ```sh
 > pip install -r requirements.txt 
 ```
+
+### 5. Populating Database
+
+*Note -* Be under the root directory (./WeSource-backend)
+
+#### 5.1 Creating Users
+
+Create users from the ./data/users.json file
+
+```sh
+> db_populateScript.py cu   
+```
+
+#### 5.2 Creating Products
+
+Create products from the ./data/products.json file
+
+```sh
+> db_populateScript.py cp   
+```
+
+#### 5.3 Creating Items
+
+Create items from the ./data/items.json file
+
+```sh
+> db_populateScript.py ci   
+```
+
+#### 5.4 Creating multiple collections
+Create mulitple collections from the ./data folder
+```sh
+# Create Item collection and User collection
+> db_populateScript.py ci cu  
+# Create User collection and Product collection
+> db_populateScript.py cu cp 
+# Create all collections
+> db_populateScript.py cu cp ci 
+```
+
+#### 5.5 Dropping Collections
+
+Dropping collections from the databse
+
+```sh
+# Drop User collection
+> db_populateScript.py du 
+# Drop Product collection 
+> db_populateScript.py dp
+# Drop Item collection 
+> db_populateScript.py di
+# Drop all collections
+> db_populateScript.py delete_all
+```
+
 ***
 *Reference -*  [Flask Installation Guide](https://flask.palletsprojects.com/en/2.0.x/installation/#create-an-environment)
 
 *If there are errors in this .md file, please update. Thank you!*
+
 
 
 

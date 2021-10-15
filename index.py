@@ -1,27 +1,25 @@
 """ Main app call """
-
 from flask import Flask, jsonify
-from pymongo import MongoClient
+from mongoengine import connect
+from bson.objectid import ObjectId
+from models.Product import Product
+from models.Item import Item
+from models.User import User
+from util.decorators.auth import authenticated
+from util.decorators.errorHandler import MongoErrorHandler, exceptionHandler 
+
 
 # Database URL
-MONGODB_URL = "mongodb+srv://capstone:Capstone123@wesourcecluster01.ctf3x.mongodb.net/WeSource?ssl=true&ssl_cert_reqs=CERT_NONE&retryWrites=true&w=majority"  # pylint: disable=line-too-long
+MONGODB_URL = "mongodb+srv://capstone:Capstone123@wesourcecluster01.ctf3x.mongodb.net/WesourceDatabase?retryWrites=true&w=majority"  # pylint: disable=line-too-long
 
 # Database Connection
-client = MongoClient(MONGODB_URL, connect=False)
+connect(host=MONGODB_URL)
 
-# Databases
-testDatabase = client["WeSource"]
-
-# Collections
 
 app = Flask(__name__)
 
+@app.route("/", methods=["POST","GET"])
+@exceptionHandler
+def index():
+    return jsonify({"hello":"world"})
 
-@app.route("/")
-def hello_world():
-    """
-    Dummy root route
-    """
-
-    resp = {"hello": "world!"}
-    return jsonify(resp)
