@@ -1,0 +1,20 @@
+[
+    {
+        "_id":"61697da2a9fd362910a4a585",
+        "firstName": "Muhammad",
+        "lastName":"Rajput",
+        "email":"dummy@gmail.com",
+        "username":"dummy101",
+        "password":"909a30df0827e17bc891",
+        "rating":8 
+    },
+    {
+        "_id":"61697dd7a9fd362910a4a586",
+        "firstName": "Donald",
+        "lastName":"Duck",
+        "email":"ducky@gmail.com",
+        "username":"dduck99",
+        "password":"90628b781f7e17bc891",
+        "rating":4
+    }
+]
