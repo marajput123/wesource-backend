@@ -1,8 +1,8 @@
 """ Main app call """
 from flask import Flask, jsonify
 from flask_restful import Api
-from util.decorators.errorHandler import exception_handler
 from mongoengine import connect
+from util.decorators.errorHandler import exception_handler
 from product import Product, Products
 
 # Have to import models to register in the document registry
