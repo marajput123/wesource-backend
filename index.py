@@ -1,14 +1,14 @@
 """ Main app call """
 from flask import Flask, jsonify
 from flask_restful import Api
-from product import Product, Products
-from mongoengine import connect
 from util.decorators.errorHandler import exception_handler
+from mongoengine import connect
+from product import Product, Products
 
 # Have to import models to register in the document registry
-import models.User
-import models.Item
-import models.Product
+import models.User  # pylint: disable=unused-import
+import models.Item  # pylint: disable=unused-import
+import models.Product  # pylint: disable=unused-import
 
 # Database URL
 MONGODB_URL = "mongodb+srv://test2:123@cluster0.fujai.mongodb.net/test"  # pylint: disable=line-too-long
