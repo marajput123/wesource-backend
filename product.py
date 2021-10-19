@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """CRUD REST-API For Product"""
 from models.Product import Product as product_model
 from flask_restful import Resource, reqparse, abort
@@ -48,6 +49,7 @@ class Product(Resource):
             itemIds=user_product.itemIds,
         )
         # If no product has been added or updated
+
         if result == 0:
             abort(404, message="Error updating product")
         return 200
