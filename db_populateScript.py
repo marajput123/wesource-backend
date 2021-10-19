@@ -4,11 +4,10 @@ from json import load
 from mongoengine import connect
 from models.Item import Item
 from models.Product import Product
-
 from models.User import User
 
 ## Replace it with you DB if you need to
-MONGODB_URL = "mongodb+srv://capstone:Capstone123@wesourcecluster01.ctf3x.mongodb.net/WesourceDatabase?retryWrites=true&w=majority"  # pylint: disable=line-too-long
+MONGODB_URL = "mongodb+srv://test2:123@cluster0.fujai.mongodb.net/test"  # pylint: disable=line-too-long
 
 
 connect(host=MONGODB_URL)
