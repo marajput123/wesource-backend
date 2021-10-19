@@ -1,8 +1,9 @@
 # pylint: disable=no-member
+# pylint: disable=no-self-use
 """CRUD REST-API For Product"""
-from models.Product import Product as product_model
 from flask_restful import Resource, reqparse, abort
 from mongoengine import ValidationError
+from models.Product import Product as product_model
 
 product_args = reqparse.RequestParser()
 product_args.add_argument("_id", type=str, help="Product ID")
