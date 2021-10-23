@@ -7,7 +7,6 @@ from product import Product, Products
 
 # Have to import models to register in the document registry
 import models.User  # pylint: disable=unused-import
-import models.Item  # pylint: disable=unused-import
 import models.Product  # pylint: disable=unused-import
 
 # Database URL
@@ -24,6 +23,7 @@ api = Api(app)
 api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
 api.add_resource(Product, "/api/product", endpoint="product")
 api.add_resource(Products, "/api/products")
+# api.add_resource(ProductItem, "/api/product/<string:product_id>/item/<string:item_id>")
 
 
 @app.route("/", methods=["POST", "GET"])
