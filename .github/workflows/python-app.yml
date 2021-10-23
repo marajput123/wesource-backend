@@ -23,10 +23,10 @@ jobs:
         pip install -r requirements.txt
     - name: Format check with black
       run: |
-        black --check --diff *.py
+        find . -type f -name "*.py" | xargs black --check --diff
     - name: Lint with pylint
       run: |
-        pylint *.py
+        find . -type f -name "*.py" | xargs pylint
 #    - name: Test with pytest
 #      run: |
 #        pytest
