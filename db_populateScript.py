@@ -2,8 +2,6 @@
 import sys
 from json import load
 from mongoengine import connect
-
-# from models.Item import Item
 from models.Product import Product
 from models.User import User
 
