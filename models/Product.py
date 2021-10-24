@@ -7,6 +7,7 @@ from mongoengine.fields import IntField, ListField, ReferenceField, StringField
 
 class Product(Document):
     """Product Collection"""
+
     _id = ObjectIdField(default=ObjectId())
     title = StringField(max_length=75, required=True)
     description = StringField(max_length=250, required=True)

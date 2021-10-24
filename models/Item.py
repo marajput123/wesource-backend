@@ -7,6 +7,7 @@ from mongoengine.fields import IntField, ReferenceField, StringField
 
 class Item(Document):
     """Item collection"""
+
     _id = ObjectIdField(default=ObjectId())
     title = StringField(max_length=75, required=True)
     description = StringField(max_length=250, required=True)

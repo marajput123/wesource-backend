@@ -10,6 +10,7 @@ iniconfig==1.1.1
 isort==5.9.3
 itsdangerous==2.0.1
 Jinja2==3.0.1
+pyjwt==2.3.0
 lazy-object-proxy==1.6.0
 MarkupSafe==2.0.1
 mccabe==0.6.1
