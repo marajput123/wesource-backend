@@ -45,7 +45,9 @@ with open("./data/products.json", encoding="utf-8") as reader:
 for key in commands:
     if key == "create_users":
         for user in USERS:
-            User(**user).save()
+            user = User(**user)
+            user.hash_password(user.password)
+            user.save()
     if key == "create_products":
         for product in PRODUCTS:
             Product(**product).save()
