@@ -10,7 +10,7 @@ import models.User  # pylint: disable=unused-import
 import models.Product  # pylint: disable=unused-import
 
 # Database URL
-MONGODB_URL = "mongodb+srv://test2:123@cluster0.fujai.mongodb.net/test"  # pylint: disable=line-too-long
+MONGODB_URL = "mongodb+srv://capstone:Capstone123@wesourcecluster01.ctf3x.mongodb.net/WesourceDatabase?retryWrites=true&w=majority"  # pylint: disable=line-too-long
 
 # Database Connection
 connect(host=MONGODB_URL)
