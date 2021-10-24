@@ -27,28 +27,6 @@ product_args.add_argument(
     action="append",
 )
 
-# https://stackoverflow.com/questions/19234737/nested-validation-with-the-flask-restful-requestparser
-# Embedded document validation for item is not working
-# embedded_item_args = reqparse.RequestParser()
-# embedded_item_args.add_argument(
-#     "_id", type=str, help="Problem with Product ID validation", location=("items",)
-# )
-# embedded_item_args.add_argument(
-#     "title", type=str, help="Problem with Product Name validation", location=("items",)
-# )
-# embedded_item_args.add_argument(
-#     "description", type=str, help="Product Description", location=("items",)
-# )
-# embedded_item_args.add_argument(
-#     "price", type=float, help="Product Price", location=("items",)
-# )
-# embedded_item_args.add_argument(
-#     "quantity", type=int, help="Product Quantity", location=("items",)
-# )
-# embedded_item_args.add_argument(
-#     "imageURL", type=str, help="Product Image URL", location=("items",)
-# )
-
 
 class Product(Resource):
     """CRUD for accessing/manipulating a single product document"""
@@ -112,55 +90,3 @@ class Products(Resource):
         """Handles the get request and returns all the products in the collection"""
         products = product_model.objects.all()
         return products.to_json(), 200
-
-
-# item_args = reqparse.RequestParser()
-# item_args.add_argument("_id", type=str, help="Problem with Product ID validation")
-# item_args.add_argument("title", type=str, help="Problem with Product Name validation")
-# item_args.add_argument("description", type=str, help="Product Description")
-# item_args.add_argument("price", type=float, help="Product Price")
-# item_args.add_argument("quantity", type=int, help="Product Quantity")
-# item_args.add_argument("imageURL", type=str, help="Product Image URL")
-
-# class ProductItem(Resource):
-#     """CRUD for accessing/manipulating a product item"""
-
-#     def get(self, item_id):
-#         """Handles the get request and returns the specific item in the product item's list"""
-#         product_id = request.form["product_id"]
-#         item = (
-#             product_model.objects.get(_id=product_id).items.filter(_id=item_id).first()
-#         )
-#         # print(product)
-#         # item = product.items(_id=item_id)
-#         print(item.to_json())
-#         return item.to_json(), 200
-
-#     # Post request can use Product's post method
-
-#     def put(self, product_id, item_id):
-#         """Handles the put request and updates a specific product item"""
-#         user_item = item_args.parse_args()
-
-#         embedded_item_list = (
-#             product_model.objects(_id=product_id).first().items.filter(_id=item_id)
-#         )
-#         embedded_item_list.update(
-#             title=user_item.title,
-#             description=user_item.description,
-#             price=user_item.price,
-#             quantity=user_item.quantity,
-#             imageURL=user_item.imageURL,
-#         )
-#         embedded_item_list.save()
-#         return 200
-
-#     def delete(self, item_id):
-#         return
-
-
-# class ProductItems(Resource):
-#     """CRUD for accessing/manipulating product items in the list"""
-
-#     def get(self):
-#         return
