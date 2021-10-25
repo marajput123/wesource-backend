@@ -31,3 +31,4 @@ tomli==1.2.1
 typing-extensions==3.10.0.2
 Werkzeug==2.0.1
 wrapt==1.12.1
+flask-restful==0.3.9
