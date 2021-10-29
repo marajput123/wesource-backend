@@ -99,18 +99,21 @@ class Products(Resource):
             # if search query is specified then find product titles that contain that query
             if query is not None:
                 # offset helps determine which product object to start with when paginating
-                pagination_limit = 15
-                offset = (int(page_number) - 1) * pagination_limit
+                product_limit = 15
+                offset = (int(page_number) - 1) * product_limit
                 # Objects are filtered by whether the title contains(case-insensitive) the query
                 paginated_products = (
                     product_model.objects(title__icontains=query)
                     .skip(offset)
-                    .limit(pagination_limit)
+                    .limit(product_limit)
                 )
             # if search query is not provided then just paginate all the product objects
             else:
+                product_limit = 15
                 offset = (int(page_number) - 1) * 15
-                paginated_products = product_model.objects.skip(offset).limit(15)
+                paginated_products = product_model.objects.skip(offset).limit(
+                    product_limit
+                )
             return paginated_products.to_json(), 200
         products = product_model.objects.all()
         return products.to_json(), 200
