@@ -107,12 +107,10 @@ class Products(Resource):
                     .skip(offset)
                     .limit(pagination_limit)
                 )
-                return paginated_products.to_json(), 200
             # if search query is not provided then just paginate all the product objects
             else:
                 offset = (int(page_number) - 1) * 15
                 paginated_products = product_model.objects.skip(offset).limit(15)
-                return paginated_products.to_json(), 200
-        else:
-            products = product_model.objects.all()
-            return products.to_json(), 200
+            return paginated_products.to_json(), 200
+        products = product_model.objects.all()
+        return products.to_json(), 200
