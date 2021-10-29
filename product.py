@@ -45,8 +45,7 @@ class Product(Resource):
         product = product_args.parse_args()
         new_product = product_model(**product)
         try:
-            saved = new_product.save()
-            print(saved)
+            new_product.save()
         except ValidationError:
             abort(400, message="Error creating product document")
         return 201
