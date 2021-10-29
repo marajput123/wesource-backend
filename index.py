@@ -27,7 +27,7 @@ api = Api(app)
 # Product routes
 api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
 api.add_resource(Product, "/api/product", endpoint="product")
-api.add_resource(Products, "/api/products")
+api.add_resource(Products, "/api/products", endpoint="products")
 
 
 @app.route("/", methods=["POST", "GET"])
