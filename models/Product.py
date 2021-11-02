@@ -2,16 +2,33 @@
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
-from mongoengine.fields import IntField, ListField, ReferenceField, StringField
+from mongoengine.fields import (
+    IntField,
+    EmbeddedDocumentListField,
+    EmbeddedDocument,
+    StringField,
+    DecimalField,
+)
 
 
-class Product(Document):
-    """Product Collection"""
+class Item(EmbeddedDocument):
+    """Item Schema"""
 
     _id = ObjectIdField(default=ObjectId())
     title = StringField(max_length=75, required=True)
     description = StringField(max_length=250, required=True)
-    price = IntField(min_value=0)
-    quantity = IntField(defualt=1)
+    price = DecimalField(min_value=0, required=True)
+    quantity = IntField(default=1)
     imageURL = StringField()
-    itemIds = ListField(ReferenceField("Item"), default=[])
+
+
+class Product(Document):
+    """Product Schema"""
+
+    _id = ObjectIdField(default=ObjectId())
+    title = StringField(max_length=75, required=True)
+    description = StringField(max_length=250, required=True)
+    price = DecimalField(min_value=0, precision=2, required=True)
+    quantity = IntField(default=1)
+    imageURL = StringField()
+    items = EmbeddedDocumentListField("Item")

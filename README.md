@@ -51,23 +51,13 @@ Create products from the ./data/products.json file
 > db_populateScript.py cp   
 ```
 
-#### 5.3 Creating Items
-
-Create items from the ./data/items.json file
-
-```sh
-> db_populateScript.py ci   
-```
-
 #### 5.4 Creating multiple collections
 Create mulitple collections from the ./data folder
 ```sh
-# Create Item collection and User collection
-> db_populateScript.py ci cu  
 # Create User collection and Product collection
 > db_populateScript.py cu cp 
 # Create all collections
-> db_populateScript.py cu cp ci 
+> db_populateScript.py cu cp
 ```
 
 #### 5.5 Dropping Collections
@@ -79,8 +69,6 @@ Dropping collections from the databse
 > db_populateScript.py du 
 # Drop Product collection 
 > db_populateScript.py dp
-# Drop Item collection 
-> db_populateScript.py di
 # Drop all collections
 > db_populateScript.py delete_all
 ```
