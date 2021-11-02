@@ -1,9 +1,12 @@
 # pylint: disable=no-member
 
 """CRUD REST-API For Product"""
+from flask import json
 from flask_restful import Resource, reqparse, abort
 from mongoengine import ValidationError
 from models.Product import Product as product_model
+from flask_cors import cross_origin
+
 
 product_args = reqparse.RequestParser()
 product_args.add_argument("_id", type=str, help="Problem with Product ID value")
@@ -78,7 +81,8 @@ class Product(Resource):
         if len(product) == 0:
             abort(404, message="Can not delete product")
         else:
-            product.delete()
+            print(product)
+            # product.delete()
         return 200
 
 
@@ -89,4 +93,4 @@ class Products(Resource):
     def get():
         """Handles the get request and returns all the products in the collection"""
         products = product_model.objects.all()
-        return products.to_json(), 200
+        return json.loads(products.to_json()), 200

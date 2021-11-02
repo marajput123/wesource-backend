@@ -52,6 +52,9 @@ def generate_auth_token(user: User, expiration=DEFAULT_TOKEN_EXPIRATION_DAYS):
     now = datetime.now()
     expiry = now + timedelta(days=expiration)
     jwt_claim = {
+        "fname": user.firstName,
+        "lname": user.lastName,
+        "email": user.email,
         "id": user.get_id(),
         "iat": int(now.timestamp()),
         "exp": int(expiry.timestamp()),

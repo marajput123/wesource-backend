@@ -28,6 +28,6 @@ class MongoErrorHandler(Exception):
     """MongoErrorHandler for errors related to mongodb"""
 
     def __init__(self, message, status):
-        Exception.__init__()
+        Exception.__init__(self)
         self.message = message
         self.status = status

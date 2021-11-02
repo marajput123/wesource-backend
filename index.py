@@ -4,10 +4,11 @@ from flask import Flask, jsonify
 from flask.globals import request
 from flask_restful import Api
 from mongoengine import connect
+from flask_cors import CORS, cross_origin
 
 from models.User import User
 from util.decorators.auth import authenticated, generate_auth_token
-from util.decorators.errorHandler import exception_handler
+from util.decorators.errorHandler import MongoErrorHandler, exception_handler
 from product import Product, Products
 
 # Have to import models to register in the document registry
@@ -22,6 +23,7 @@ connect(host=MONGODB_URL)
 
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 # Product routes
@@ -37,7 +39,7 @@ def index():
     return jsonify({"hello": "world"})
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 @exception_handler
 def login():
     """User login"""
@@ -45,7 +47,8 @@ def login():
     user = User.get_by_email(body["email"])
     if user.verify_password(body["password"]):
         return jsonify({"jwt": generate_auth_token(user)})
-    return "Username/Password incorrect", HTTPStatus.UNAUTHORIZED
+    raise MongoErrorHandler("Email or password! are not correct. Please make sure you have entered the correct credentials.", 400)
+    
 
 
 @app.route("/profile", methods=["GET"])
@@ -55,3 +58,12 @@ def profile(**kwargs):
     """Profile page"""
     user = kwargs["current_user"]
     return user.to_json()
+
+
+@app.route("/user/<id>", methods=["DELETE"])
+@exception_handler
+def user(id):
+    print(id)
+    user  = User.get_by_id(id)
+    print(user.firstName)
+    return {"message":"found"}, 200

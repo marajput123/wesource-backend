@@ -5,6 +5,7 @@ from mongoengine.document import Document
 from mongoengine.fields import EmailField, IntField, StringField
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 from util.decorators.errorHandler import MongoErrorHandler
 
 
@@ -30,11 +31,12 @@ class User(Document):
 
     @classmethod
     def get_by_email(cls, email):
+        
         """Retrieve user by email"""
         data = User.objects(email=email).first()
         if data is not None:
             return data
-        raise MongoErrorHandler(f"Canot find user with email({email})", 404)
+        raise MongoErrorHandler(f"Email or password are not correct. Please make sure you have entered the correct credentials.", 400)
 
     @classmethod
     def get_by_id(cls, user_id: str):
