@@ -12,7 +12,7 @@ from util.decorators.errorHandler import MongoErrorHandler
 class User(Document):
     """User Collection"""
 
-    _id = ObjectIdField(default=ObjectId())
+    _id = ObjectIdField(default=ObjectId(), primary_key=True)
     firstName = StringField(max_length=50, required=True)
     lastName = StringField(max_length=50, required=True)
     email = EmailField(max_length=50, required=True, unique=True)
@@ -39,7 +39,7 @@ class User(Document):
     @classmethod
     def get_by_id(cls, user_id: str):
         """Retrieve user by id"""
-        data = User.objects(_id=ObjectId(oid=user_id)).first()
+        data = User.objects(_id=user_id)
         if data is not None:
             return data
         raise MongoErrorHandler(f"Canot find user with id({user_id})", 404)

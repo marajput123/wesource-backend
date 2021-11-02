@@ -6,7 +6,7 @@ from mongoengine import connect
 from flask_restful import Resource, reqparse, abort
 from models.User import User
 from util.decorators.auth import authenticated, generate_auth_token
-from util.decorators.errorHandler import exception_handler
+from util.decorators.errorHandler import MongoErrorHandler, exception_handler
 
 
 # Database URL
@@ -50,53 +50,38 @@ def profile(**kwargs):
 @app.route("/register", methods =["POST"])
 @exception_handler
 def register():
-    "Method to register new User"
+    """Method to register new User"""
     body = request.get_json()
-    email = body["email"]
-    password = body["password"]
-    username = body["username"]
-    firstname = body["firstname"]
-    lastname = body["lastname"]
-    user = User(firstName = firstname, 
-    lastName = lastname, 
-    email = email, 
-    password = password,
-    username = username)
-    user.hash_password()
+    user = User(firstName = body["firstName"], 
+                lastName = body["lastName"], 
+                email = body["email"], 
+                password = body["password"],
+                username = body["username"])
+    user.hash_password(body["password"])
     user.save()
+    return {"message": "account registered"} , 200
+    
+@app.route("/user/<string:id>", methods =["DELETE"])
+@exception_handler
+def delete(id):
+    """Method to delete user"""
+    user = User.get_by_id(id)
+    if not user:
+        raise MongoErrorHandler("Id not found", 404)
+    else:
+        user.delete()
+    return {"message": "account deleted"} , 200
 
-user_args = request.RequestParser()
-user_args.add_arguement("_id", type=str, help = "Id of User")
-user_args.add_arguement("email", type=str, help = "User Email")
-user_args.add_arguement("firstname", type=str, help = "User firstname")
-user_args.add_arguement("lastname", type=str, help = "User lastname")
-user_args.add_arguement("username", type=str, help = "User username")
-user_args.add_arguement("password", type=str, help = "User password")
-
-class User(Resource):
-
-    "Method to delete user"
-    @staticmethod
-    def delete(user_id):
-        user = user_id.objects(_id=user_id)
-        if not user:   
-            return jsonify({"Error" : "ID not found"})
-        else:
-            user.delete()
-        return 204, "User successfully deleted"
-
-    "Method to update user"
-    @staticmethod
-    def patch(user_id):
-        body = request.json()
-        user = User.get_by_id(body["id"])
-        result = user(_id = user_id).update_one(
-            username = user.username,
-            email = user.email,
-            firstname = user.firstname,
-            lastname = user.lastname
-        )
-        if not result:
-            return 404, "User ID not found"
-        else:
-            return 200, "User succesfully updated"
+@app.route("/user/<username>", methods =["PATCH"])
+@exception_handler
+def update(username):
+    """Method to update user"""
+    user = User.get_by_username(username)
+    body = request.get_json()
+    if not user: 
+        raise MongoErrorHandler("Username not found", 404)
+    else:
+        user.modify(**body)
+        user.save()
+        return {"message": "accounted updated"} , 200
+        
