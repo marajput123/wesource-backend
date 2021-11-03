@@ -10,6 +10,8 @@ authentication_blueprint = Blueprint("authentication_blueprint", __name__)
 auth_api = Api(authentication_blueprint)
 
 class Authentication(Resource):
+    
+    # POST - http://127.0.0.1:5000/api/login
     @exception_handler
     def post(self):
         """User login"""
@@ -19,6 +21,7 @@ class Authentication(Resource):
             return jsonify({"jwt": generate_auth_token(user)})
         raise MongoErrorHandler("Email or password are not correct. Please make sure you have entered the correct credentials.", 400)
         
+    # PUT - http://127.0.0.1:5000/api/login/<string:user_id>
     @exception_handler
     @authenticated
     def get(self, user_id):

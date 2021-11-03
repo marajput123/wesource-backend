@@ -1,13 +1,17 @@
 # pylint: disable=no-member
 
 """CRUD REST-API For Product"""
+from bson.objectid import ObjectId
 from flask import json, Blueprint, request
 from flask_restful import Resource, reqparse, abort, Api, Resource
 from mongoengine import ValidationError
 from models.Product import Product as product_model
 from http import HTTPStatus
 from util.decorators.auth import authenticated
-from util.decorators.errorHandler import exception_handler
+from util.decorators.errorHandler import MongoErrorHandler, exception_handler
+from models.Group import Group as group_model
+from util.helper.helper_functions import cleanArguments
+
 
 
 product_blueprint = Blueprint('product_api', __name__)
@@ -16,6 +20,7 @@ api = Api(product_blueprint)
 
 product_args = reqparse.RequestParser()
 product_args.add_argument("_id", type=str, help="Problem with Product ID value")
+product_args.add_argument("user_id", type=str, help="Problem with User ID value")
 product_args.add_argument(
     "title", type=str, help="Problem with Product Name validation"
 )
@@ -39,7 +44,8 @@ product_args.add_argument(
 
 class Product(Resource):
     """CRUD for accessing/manipulating a single product document"""
-
+    
+    # GET - http://127.0.0.1:5000/api/product/<string:product_id>
     def get(self,product_id):
         """Handles get request for retrieving a single product"""
         product = product_model.objects(_id=product_id).first()
@@ -47,20 +53,30 @@ class Product(Resource):
             abort(HTTPStatus.NOT_FOUND, message= "Product could not be created")
         return json.loads(product.to_json()), HTTPStatus.CREATED
 
-    # @exception_handler
-    # @authenticated
+    # POST - http://127.0.0.1:5000/api/product
+    @exception_handler
+    @authenticated
     def post(self):
         """Handles the post request and creates a new product"""
-        product = product_args.parse_args()
-        new_product = product_model(**product)
+        body = cleanArguments(product_args)
+        product_id = ObjectId()
+        new_product = product_model(**body, _id=product_id)
+        new_group = group_model(
+            product_id=product_id,
+            organizer_id=body["user_id"],
+            status="Funding"
+        )
         try:
             new_product.save()
-        except ValidationError:
-            abort(HTTPStatus.BAD_REQUEST, message=ValidationError.to_dict())
+            new_group.save()
+
+        except ValidationError as e:
+             raise MongoErrorHandler(e.to_dict(), HTTPStatus.BAD_REQUEST)
         return json.loads(new_product.to_json()), HTTPStatus.OK
 
-    # @exception_handler
-    # @authenticated
+    # PUT - http://127.0.0.1:5000/api/product/<string:product_id>
+    @exception_handler
+    @authenticated
     def put(self, product_id):
         """Handles the put request to update a single product"""
         body = {}
@@ -70,25 +86,35 @@ class Product(Resource):
         try:
             product_model.objects(_id=product_id).first().modify(**body)
         except Exception as e:
-            abort(HTTPStatus.NOT_FOUND, message="Could not find the product")
+            raise MongoErrorHandler("Could not find the product", HTTPStatus.NOT_FOUND)
+
         return {"message":f"Product with id of {product_id} updated"}, HTTPStatus.OK
     
-    # @exception_handler
-    # @authenticated
+
+    # DELETE - http://127.0.0.1:5000/api/product/<string:product_id>
+    @exception_handler
+    @authenticated
     def delete(self, product_id):
         """Handles the delete request to delete a single product"""
         product = product_model.objects(_id=product_id)
-        # If product can't be found then abort
-        if len(product) == 0:
-            abort(HTTPStatus.BAD_REQUEST, message="Can not delete product")
-        else:
+        try:
+            productId = product[0]["_id"]
+            group = group_model.objects(product_id=productId)
             product.delete()
+            if len(group) == 0:
+                raise MongoErrorHandler("Product deleted but Group does not exist", HTTPStatus.BAD_REQUEST)
+            group.delete()
+        except Exception:
+            raise MongoErrorHandler("Product does not exist", HTTPStatus.BAD_REQUEST)
+
         return {"message":f"Product with id of {product_id} deleted"}, HTTPStatus.OK
 
 
 class Products(Resource):
     """CRUD for accessing/manipulating multiple product document"""
 
+    # GET - http://127.0.0.1:5000/api/products
+    @exception_handler
     def get(self):
         """Handles the get request and returns all the products in the collection"""
         # Handles the search query and pagination
