@@ -1,16 +1,16 @@
 # pylint: disable=no-member
 
 """CRUD REST-API For Product"""
+from http import HTTPStatus
 from flask import json, Blueprint, request
-from flask_restful import Resource, reqparse, abort, Api, Resource
+from flask_restful import Resource, reqparse, abort, Api
 from mongoengine import ValidationError
 from models.Product import Product as product_model
-from http import HTTPStatus
 from util.decorators.auth import authenticated
-from util.decorators.errorHandler import exception_handler
+from util.decorators.errorHandler import MongoErrorHandler, exception_handler
 
 
-product_blueprint = Blueprint('product_api', __name__)
+product_blueprint = Blueprint("product_api", __name__)
 api = Api(product_blueprint)
 
 
@@ -40,42 +40,50 @@ product_args.add_argument(
 class Product(Resource):
     """CRUD for accessing/manipulating a single product document"""
 
-    def get(self,product_id):
+    @staticmethod
+    def get(product_id):
         """Handles get request for retrieving a single product"""
         product = product_model.objects(_id=product_id).first()
         if len(product) == 0:
-            abort(HTTPStatus.NOT_FOUND, message= "Product could not be created")
+            abort(HTTPStatus.NOT_FOUND, message="Product could not be created")
         return json.loads(product.to_json()), HTTPStatus.CREATED
 
-    # @exception_handler
-    # @authenticated
-    def post(self):
+    @staticmethod
+    @exception_handler
+    @authenticated
+    def post():
         """Handles the post request and creates a new product"""
         product = product_args.parse_args()
         new_product = product_model(**product)
         try:
             new_product.save()
-        except ValidationError:
-            abort(HTTPStatus.BAD_REQUEST, message=ValidationError.to_dict())
+        except ValidationError as validation_error:
+            raise MongoErrorHandler(
+                ValidationError.to_dict(), #pylint: disable = no-value-for-parameter
+                HTTPStatus.BAD_REQUEST) from validation_error
         return json.loads(new_product.to_json()), HTTPStatus.OK
 
+    @staticmethod
     # @exception_handler
     # @authenticated
-    def put(self, product_id):
+    def put(product_id):
         """Handles the put request to update a single product"""
         body = {}
-        for key,value in product_args.parse_args().items():
-            if value != None:
+        for key, value in product_args.parse_args().items():
+            if value is not None:
                 body[key] = value
         try:
             product_model.objects(_id=product_id).first().modify(**body)
-        except Exception as e:
-            abort(HTTPStatus.NOT_FOUND, message="Could not find the product")
-        return {"message":f"Product with id of {product_id} updated"}, HTTPStatus.OK
-    
-    # @exception_handler
-    # @authenticated
-    def delete(self, product_id):
+        except AttributeError as attr_err:
+            raise MongoErrorHandler(
+                "Could not update the product",
+                HTTPStatus.NOT_FOUND) from attr_err
+        return {"message": f"Product with id of {product_id} updated"}, HTTPStatus.OK
+
+    @staticmethod
+    @exception_handler
+    @authenticated
+    def delete(product_id):
         """Handles the delete request to delete a single product"""
         product = product_model.objects(_id=product_id)
         # If product can't be found then abort
@@ -83,13 +91,14 @@ class Product(Resource):
             abort(HTTPStatus.BAD_REQUEST, message="Can not delete product")
         else:
             product.delete()
-        return {"message":f"Product with id of {product_id} deleted"}, HTTPStatus.OK
+        return {"message": f"Product with id of {product_id} deleted"}, HTTPStatus.OK
 
 
 class Products(Resource):
     """CRUD for accessing/manipulating multiple product document"""
 
-    def get(self):
+    @staticmethod
+    def get():
         """Handles the get request and returns all the products in the collection"""
         # Handles the search query and pagination
         query = request.args.get("q")

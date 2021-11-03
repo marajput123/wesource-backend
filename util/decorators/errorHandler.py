@@ -1,6 +1,4 @@
 """Module for global error handling"""
-from flask.json import jsonify
-
 
 def exception_handler(func):
     """Handle all exceptions from routes"""
@@ -21,7 +19,7 @@ def format_and_return_error(error):
     """Format exception and return it as response"""
     status = getattr(error, "status", 500)
     message = getattr(error, "message", error.args)
-    if type(message) == tuple:
+    if isinstance(message) == tuple:
         message = message[0]
     return {"message": message}, status
 

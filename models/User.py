@@ -31,12 +31,16 @@ class User(Document):
 
     @classmethod
     def get_by_email(cls, email):
-        
+
         """Retrieve user by email"""
         data = User.objects(email=email).first()
         if data is not None:
             return data
-        raise MongoErrorHandler(f"Email or password are not correct. Please make sure you have entered the correct credentials.", 400)
+        raise MongoErrorHandler(
+            """Email or password are not correct.
+                Please make sure you have entered the correct credentials.""",
+            400,
+        )
 
     @classmethod
     def get_by_id(cls, user_id: str):
