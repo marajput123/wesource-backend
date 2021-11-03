@@ -25,5 +25,3 @@ CORS(app)
 app.register_blueprint(product_blueprint)
 app.register_blueprint(authentication_blueprint)
 app.register_blueprint(group_blueprint)
-
-
