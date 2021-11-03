@@ -13,7 +13,7 @@ from mongoengine.fields import (
 class Item(EmbeddedDocument):
     """Item Schema"""
 
-    _id = ObjectIdField()
+    _id = ObjectIdField(primary_key=True)
     title = StringField(max_length=75, required=True)
     description = StringField(max_length=250, required=True)
     price = DecimalField(min_value=0, required=True)
@@ -24,7 +24,7 @@ class Item(EmbeddedDocument):
 class Product(Document):
     """Product Schema"""
 
-    _id = ObjectIdField()
+    _id = ObjectIdField(primary_key=True)
     title = StringField(max_length=75, required=True)
     description = StringField(max_length=250, required=True)
     price = DecimalField(min_value=0, precision=2, required=True)

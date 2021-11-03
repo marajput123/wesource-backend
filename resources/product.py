@@ -1,9 +1,18 @@
 # pylint: disable=no-member
 
 """CRUD REST-API For Product"""
-from flask_restful import Resource, reqparse, abort, request
+from http import HTTPStatus
+from flask import json, Blueprint, request
+from flask_restful import Resource, reqparse, abort, Api
 from mongoengine import ValidationError
 from models.Product import Product as product_model
+from util.decorators.auth import authenticated
+from util.decorators.errorHandler import MongoErrorHandler, exception_handler
+
+
+product_blueprint = Blueprint("product_api", __name__)
+api = Api(product_blueprint)
+
 
 product_args = reqparse.RequestParser()
 product_args.add_argument("_id", type=str, help="Problem with Product ID value")
@@ -36,50 +45,54 @@ class Product(Resource):
         """Handles get request for retrieving a single product"""
         product = product_model.objects(_id=product_id).first()
         if len(product) == 0:
-            abort(404)
-        return product.to_json(), 200
+            abort(HTTPStatus.NOT_FOUND, message="Product could not be created")
+        return json.loads(product.to_json()), HTTPStatus.CREATED
 
     @staticmethod
+    @exception_handler
+    @authenticated
     def post():
         """Handles the post request and creates a new product"""
         product = product_args.parse_args()
         new_product = product_model(**product)
         try:
             new_product.save()
-        except ValidationError:
-            abort(400, message="Error creating product document")
-        return 201
+        except ValidationError as validation_error:
+            raise MongoErrorHandler(
+                ValidationError.to_dict(),  # pylint: disable = no-value-for-parameter
+                HTTPStatus.BAD_REQUEST,
+            ) from validation_error
+        return json.loads(new_product.to_json()), HTTPStatus.OK
 
-    # NOTE this assumes that the userProduct does not contain None values
-    # Since there doesn't seem to be a way to keep original value if new value is None
-    # As such (almost) all fields should be required and updated
     @staticmethod
+    # @exception_handler
+    # @authenticated
     def put(product_id):
         """Handles the put request to update a single product"""
-        user_product = product_model(**product_args.parse_args())
-        result = product_model.objects(_id=product_id).update_one(
-            title=user_product.title,
-            description=user_product.description,
-            price=user_product.price,
-            quantity=user_product.quantity,
-            imageURL=user_product.imageURL,
-            items=user_product.items,
-        )
-        # If no product has been added or updated
-        if result == 0:
-            abort(404, message="Error updating product")
-        return 200
+        body = {}
+        for key, value in product_args.parse_args().items():
+            if value is not None:
+                body[key] = value
+        try:
+            product_model.objects(_id=product_id).first().modify(**body)
+        except AttributeError as attr_err:
+            raise MongoErrorHandler(
+                "Could not update the product", HTTPStatus.NOT_FOUND
+            ) from attr_err
+        return {"message": f"Product with id of {product_id} updated"}, HTTPStatus.OK
 
     @staticmethod
+    @exception_handler
+    @authenticated
     def delete(product_id):
         """Handles the delete request to delete a single product"""
         product = product_model.objects(_id=product_id)
         # If product can't be found then abort
         if len(product) == 0:
-            abort(404, message="Can not delete product")
+            abort(HTTPStatus.BAD_REQUEST, message="Can not delete product")
         else:
             product.delete()
-        return 200
+        return {"message": f"Product with id of {product_id} deleted"}, HTTPStatus.OK
 
 
 class Products(Resource):
@@ -87,8 +100,7 @@ class Products(Resource):
 
     @staticmethod
     def get():
-        """Handles the get request and returns multiple products in the collection"""
-
+        """Handles the get request and returns all the products in the collection"""
         # Handles the search query and pagination
         query = request.args.get("q")
         page_number = request.args.get("page")
@@ -115,4 +127,9 @@ class Products(Resource):
                 )
             return paginated_products.to_json(), 200
         products = product_model.objects.all()
-        return products.to_json(), 200
+        return json.loads(products.to_json()), 200
+
+
+api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
+api.add_resource(Product, "/api/product", endpoint="product")
+api.add_resource(Products, "/api/products")

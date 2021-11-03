@@ -7,6 +7,10 @@ This project will use Bearer Authentication and JWT tokens to authenticate users
 A JWT token contains following information:
 
 - `user_id`: The user `_id` stored in mongo database.
+- `firstName`: The user `firstName` stored in mongo database.
+- `lastName`: The user `lastName` stored in mongo database.
+- `email`: The user `email` stored in mongo database.
+- `username`: The user `username` stored in mongo database.
 - `iat`: Time when token is created in unix epoch format.
 - `exp`: Time when token expires in unix epoch format. By default, a token will expire after `30 days`.
 
@@ -15,6 +19,10 @@ A JWT token contains following information:
 ```json
 {
     "user_id": "61697da2a9fd362910a4a585",
+    "email":"dummy@gmail.com",
+    "firstName":"muhammad",
+    "lastName":"rajput",
+    "username":"get_bopped99",
     "iat": 1634956713,
     "exp": 1637552313
 }
