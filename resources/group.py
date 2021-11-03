@@ -9,6 +9,7 @@ from util.decorators.errorHandler import exception_handler
 group_blueprint = Blueprint("group_api", __name__)
 api = Api(group_blueprint)
 
+
 class Group(Resource):
     """CRUD endpoints for Groups"""
 
@@ -31,7 +32,6 @@ class Group(Resource):
         group["user_ids"].append(body["user_id"])
         group.save()
         return json.loads(group.to_json()), HTTPStatus.CREATED
-
 
 
 api.add_resource(Group, "/api/group/<string:group_id>", endpoint="group_by_id")

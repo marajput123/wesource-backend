@@ -13,8 +13,7 @@ from models.Product import Product as product_model
 from models.Group import Group as group_model
 
 
-
-product_blueprint = Blueprint('product_api', __name__)
+product_blueprint = Blueprint("product_api", __name__)
 api = Api(product_blueprint)
 
 
@@ -52,7 +51,7 @@ class Product(Resource):
         """Handles get request for retrieving a single product"""
         product = product_model.objects(_id=product_id).first()
         if len(product) == 0:
-            abort(HTTPStatus.NOT_FOUND, message= "Product could not be created")
+            abort(HTTPStatus.NOT_FOUND, message="Product could not be created")
         return json.loads(product.to_json()), HTTPStatus.CREATED
 
     # POST - http://127.0.0.1:5000/api/product
@@ -65,9 +64,7 @@ class Product(Resource):
         product_id = ObjectId()
         new_product = product_model(**body, _id=product_id)
         new_group = group_model(
-            product_id=product_id,
-            organizer_id=body["user_id"],
-            status="Funding"
+            product_id=product_id, organizer_id=body["user_id"], status="Funding"
         )
         try:
             new_product.save()
@@ -75,8 +72,7 @@ class Product(Resource):
 
         except ValidationError as validation_error:
             raise MongoErrorHandler(
-                validation_error.to_dict(),
-                HTTPStatus.BAD_REQUEST
+                validation_error.to_dict(), HTTPStatus.BAD_REQUEST
             ) from validation_error
         return json.loads(new_product.to_json()), HTTPStatus.OK
 
@@ -87,19 +83,17 @@ class Product(Resource):
     def put(cls, product_id):
         """Handles the put request to update a single product"""
         body = {}
-        for key,value in product_args.parse_args().items():
+        for key, value in product_args.parse_args().items():
             if value is not None:
                 body[key] = value
         try:
             product_model.objects(_id=product_id).first().modify(**body)
         except AttributeError as attr_error:
             raise MongoErrorHandler(
-                "Could not find the product",
-                HTTPStatus.NOT_FOUND
+                "Could not find the product", HTTPStatus.NOT_FOUND
             ) from attr_error
 
-        return {"message":f"Product with id of {product_id} updated"}, HTTPStatus.OK
-
+        return {"message": f"Product with id of {product_id} updated"}, HTTPStatus.OK
 
     # DELETE - http://127.0.0.1:5000/api/product/<string:product_id>
     @classmethod
@@ -113,14 +107,15 @@ class Product(Resource):
             product.delete()
             if len(group) == 0:
                 raise MongoErrorHandler(
-                    "Product deleted but Group does not exist",
-                    HTTPStatus.BAD_REQUEST
+                    "Product deleted but Group does not exist", HTTPStatus.BAD_REQUEST
                 )
             group.delete()
         except Exception as exception:
-            raise MongoErrorHandler("Product does not exist", HTTPStatus.BAD_REQUEST) from exception
+            raise MongoErrorHandler(
+                "Product does not exist", HTTPStatus.BAD_REQUEST
+            ) from exception
 
-        return {"message":f"Product with id of {product_id} deleted"}, HTTPStatus.OK
+        return {"message": f"Product with id of {product_id} deleted"}, HTTPStatus.OK
 
 
 class Products(Resource):
