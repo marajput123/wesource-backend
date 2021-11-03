@@ -1,5 +1,6 @@
 """Module for global error handling"""
 
+
 def exception_handler(func):
     """Handle all exceptions from routes"""
 

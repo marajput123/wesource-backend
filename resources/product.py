@@ -59,8 +59,9 @@ class Product(Resource):
             new_product.save()
         except ValidationError as validation_error:
             raise MongoErrorHandler(
-                ValidationError.to_dict(), #pylint: disable = no-value-for-parameter
-                HTTPStatus.BAD_REQUEST) from validation_error
+                ValidationError.to_dict(),  # pylint: disable = no-value-for-parameter
+                HTTPStatus.BAD_REQUEST,
+            ) from validation_error
         return json.loads(new_product.to_json()), HTTPStatus.OK
 
     @staticmethod
@@ -76,8 +77,8 @@ class Product(Resource):
             product_model.objects(_id=product_id).first().modify(**body)
         except AttributeError as attr_err:
             raise MongoErrorHandler(
-                "Could not update the product",
-                HTTPStatus.NOT_FOUND) from attr_err
+                "Could not update the product", HTTPStatus.NOT_FOUND
+            ) from attr_err
         return {"message": f"Product with id of {product_id} updated"}, HTTPStatus.OK
 
     @staticmethod
