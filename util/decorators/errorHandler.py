@@ -21,7 +21,9 @@ def format_and_return_error(error):
     """Format exception and return it as response"""
     status = getattr(error, "status", 500)
     message = getattr(error, "message", error.args)
-    return jsonify({"message": message}), status
+    if type(message) == tuple:
+        message = message[0]
+    return {"message": message}, status
 
 
 class MongoErrorHandler(Exception):

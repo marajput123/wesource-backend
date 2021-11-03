@@ -55,6 +55,7 @@ def generate_auth_token(user: User, expiration=DEFAULT_TOKEN_EXPIRATION_DAYS):
         "fname": user.firstName,
         "lname": user.lastName,
         "email": user.email,
+        "uname": user.username,
         "id": user.get_id(),
         "iat": int(now.timestamp()),
         "exp": int(expiry.timestamp()),

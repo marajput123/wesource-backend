@@ -5,7 +5,6 @@ from flask import json
 from flask_restful import Resource, reqparse, abort
 from mongoengine import ValidationError
 from models.Product import Product as product_model
-from flask_cors import cross_origin
 
 
 product_args = reqparse.RequestParser()
