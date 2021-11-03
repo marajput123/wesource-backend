@@ -2,7 +2,7 @@
 
 """CRUD REST-API For Product"""
 from flask import json
-from flask_restful import Resource, reqparse, abort
+from flask_restful import Resource, reqparse, abort, request
 from mongoengine import ValidationError
 from models.Product import Product as product_model
 
@@ -90,6 +90,32 @@ class Products(Resource):
 
     @staticmethod
     def get():
-        """Handles the get request and returns all the products in the collection"""
+        """Handles the get request and returns multiple products in the collection"""
+
+        # Handles the search query and pagination
+        query = request.args.get("q")
+        page_number = request.args.get("page")
+
+        # if no page number is provided then get all the product from the DB
+        if page_number is not None:
+            # if search query is specified then find product titles that contain that query
+            if query is not None:
+                # offset helps determine which product object to start with when paginating
+                product_limit = 15
+                offset = (int(page_number) - 1) * product_limit
+                # Objects are filtered by whether the title contains(case-insensitive) the query
+                paginated_products = (
+                    product_model.objects(title__icontains=query)
+                    .skip(offset)
+                    .limit(product_limit)
+                )
+            # if search query is not provided then just paginate all the product objects
+            else:
+                product_limit = 15
+                offset = (int(page_number) - 1) * 15
+                paginated_products = product_model.objects.skip(offset).limit(
+                    product_limit
+                )
+            return paginated_products.to_json(), 200
         products = product_model.objects.all()
         return json.loads(products.to_json()), 200
