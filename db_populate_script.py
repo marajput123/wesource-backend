@@ -4,6 +4,7 @@ from json import load
 from mongoengine import connect
 from models.Product import Product
 from models.User import User
+from models.Review import Review
 
 ## Replace it with you DB if you need to
 MONGODB_URL = "mongodb+srv://capstone:Capstone123@wesourcecluster01.ctf3x.mongodb.net/WesourceDatabase?retryWrites=true&w=majority"  # pylint: disable=line-too-long
@@ -18,10 +19,14 @@ for arg in sys.argv:
         commands["create_users"] = True
     elif arg == "cp":
         commands["create_products"] = True
+    elif arg == "cr":
+        commands["create_reviews"] = True
     elif arg == "du":
         commands["delete_users"] = True
     elif arg == "dp":
         commands["delete_products"] = True
+    elif arg == "dr":
+        commands["delete_reviews"] = True
     elif arg == "delete_all":
         commands["delete_all"] = True
 
@@ -31,7 +36,9 @@ with open(file="./data/users.json", encoding="utf-8") as reader:
 PRODUCTS = None
 with open("./data/products.json", encoding="utf-8") as reader:
     PRODUCTS = load(reader)
-
+REVIEWS = None
+with open("./data/reviews.json", encoding="utf-8") as reader:
+    REVIEWS = load(reader)
 
 for key in commands:
     if key == "create_users":
@@ -42,10 +49,16 @@ for key in commands:
     if key == "create_products":
         for product in PRODUCTS:
             Product(**product).save()
+    if key == "create_reviews":
+        for review in REVIEWS:
+            Review(**review).save()
     if key == "delete_users":
         User.drop_collection()
     if key == "delete_products":
         Product.drop_collection()
+    if key == "delete_reviews":
+        Review.drop_collection()
     if key == "delete_all":
         User.drop_collection()
         Product.drop_collection()
+        Review.drop_collection()
