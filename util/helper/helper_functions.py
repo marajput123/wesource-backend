@@ -20,7 +20,7 @@ def clean_product_queries(request):
         "quantity__lte",
         "date__lte",
         "date__gte",
-        "title_icontains",
+        "title__icontains",
     )
     for key, value in request.args.items():
         if key in valid_queries:
