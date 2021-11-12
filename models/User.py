@@ -13,7 +13,7 @@ from util.decorators.errorHandler import MongoErrorHandler
 class User(Document):
     """User Collection"""
 
-    _id = ObjectIdField(primary_key=True)
+    _id = ObjectIdField(default=ObjectId, primary_key=True)
     firstName = StringField(max_length=50, required=True)
     lastName = StringField(max_length=50, required=True)
     email = EmailField(max_length=50, required=True, unique=True)

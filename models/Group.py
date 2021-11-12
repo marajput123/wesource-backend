@@ -8,7 +8,7 @@ from mongoengine.fields import ListField, StringField
 class Group(Document):
     """Group Collection"""
 
-    _id = ObjectIdField(default=ObjectId(), primary_key=True)
+    _id = ObjectIdField(default=ObjectId, primary_key=True)
     product_id = ObjectIdField(db_field="Product", required=True)
     organizer_id = ObjectIdField(db_field="User", required=True)
     user_ids = ListField(ObjectIdField(db_field="User", required=True))

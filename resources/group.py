@@ -33,6 +33,15 @@ class Group(Resource):
         group.save()
         return json.loads(group.to_json()), HTTPStatus.CREATED
 
+    @classmethod
+    @exception_handler
+    @authenticated
+    def put(cls, group_id):
+        """Update group"""
+        body = request.get_json()
+        group = group_model.get_by_id(group_id).first().modify(**body)
+        group.save()
+
 
 api.add_resource(Group, "/api/group/<string:group_id>", endpoint="group_by_id")
 api.add_resource(Group, "/api/group", endpoint="group")
