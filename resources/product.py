@@ -2,6 +2,7 @@
 
 """CRUD REST-API For Product"""
 from http import HTTPStatus
+from bson import json_util
 from bson.objectid import ObjectId
 from flask import json, Blueprint, request
 from flask_restful import Resource, reqparse, Api
@@ -79,10 +80,7 @@ class Product(Resource):
     @authenticated
     def put(cls, product_id):
         """Handles the put request to update a single product"""
-        body = {}
-        for key, value in product_args.parse_args().items():
-            if value is not None:
-                body[key] = value
+        body = clean_arguments(product_args)
         try:
             product_model.objects(_id=product_id).first().modify(**body)
         except AttributeError as attr_error:
@@ -148,16 +146,36 @@ class Products(Resource):
                 "data": json.loads(paginated_products.to_json()),
                 "total_count": product_count,
             }
-            return json_response, 200
+            return json_response, HTTPStatus.ACCEPTED
+
             # return paginated_products.to_json(), 200
         products = product_model.objects.all()
         json_response = {
             "data": json.loads(products.to_json()),
             "total_count": product_count,
         }
-        return json_response, 200
+        return json_response, HTTPStatus.OK
+
+
+class ProductsLanding(Resource):
+    """CRUD for accessing/manipulating multiple product document"""
+
+    # GET - http://127.0.0.1:5000/api/products/landing
+    @classmethod
+    @exception_handler
+    def get(cls):
+        """A get request that returns the number of specified product for the landing page"""
+        num_product = request.args.get("num", 3, type=int)
+        if num_product <= 0:
+            # Does not currently check upperlimit so db size
+            return "Invalid product quantity", HTTPStatus.BAD_REQUEST
+
+        # Gets the set quantity of random document from the db
+        products = product_model.objects.aggregate({"$sample": {"size": num_product}})
+        return json.loads(json_util.dumps(products)), HTTPStatus.OK
 
 
 api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
 api.add_resource(Product, "/api/product", endpoint="product")
 api.add_resource(Products, "/api/products")
+api.add_resource(ProductsLanding, "/api/products/landing", endpoint="product_landing")
