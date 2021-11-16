@@ -175,7 +175,6 @@ class ProductsLanding(Resource):
         return json.loads(json_util.dumps(products)), HTTPStatus.OK
 
 
-
 api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
 api.add_resource(Product, "/api/product", endpoint="product")
 api.add_resource(Products, "/api/products")
