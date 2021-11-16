@@ -3,7 +3,7 @@
 """CRUD REST-API For Product"""
 from http import HTTPStatus
 from flask import json, Blueprint, request
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Api, Resource
 from models.Group import Group as group_model
 from models.Product import Product as product_model
 from util.decorators.auth import authenticated
@@ -12,21 +12,6 @@ from util.decorators.errorHandler import exception_handler
 
 group_blueprint = Blueprint("group_api", __name__)
 api = Api(group_blueprint)
-
-group_args = reqparse.RequestParser()
-group_args.add_argument(
-    "product_id", type=str, help="Problem with Product Id validation"
-)
-group_args.add_argument(
-    "organizer_id", type=str, help="Problem with Organizer Id value"
-)
-group_args.add_argument(
-    "user_ids",
-    type=list,
-    help="Problem with the list of the user ids' value",
-    action="append",
-)
-group_args.add_argument("status", type=int, help="Problem with status value")
 
 
 class Group(Resource):
