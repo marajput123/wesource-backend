@@ -7,7 +7,6 @@ from bson.objectid import ObjectId
 from flask import json, Blueprint, request
 from flask_restful import Resource, reqparse, Api
 from mongoengine import ValidationError
-from bson import json_util
 from util.decorators.auth import authenticated
 from util.decorators.errorHandler import MongoErrorHandler, exception_handler
 from util.helper.helper_functions import clean_arguments, clean_product_queries

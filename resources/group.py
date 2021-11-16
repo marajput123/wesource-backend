@@ -70,7 +70,7 @@ class GroupLanding(Resource):
     @exception_handler
     def get(cls):
 
-        """Handles the get request and returns the number of products specified for the landing page"""
+        """A get request that returns the number of specified product for the landing page"""
 
         # Takes in an arg of num, the number of delivered product to query for
         num_delivered = request.args.get("num", 3, type=int)
