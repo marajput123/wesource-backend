@@ -5,6 +5,7 @@ from flask_cors import CORS
 
 from resources.product import product_blueprint
 from resources.authentication import authentication_blueprint
+from resources.group import group_blueprint
 
 # Have to import models to register in the document registry
 import models.User  # pylint: disable=unused-import
@@ -23,3 +24,4 @@ CORS(app)
 
 app.register_blueprint(product_blueprint)
 app.register_blueprint(authentication_blueprint)
+app.register_blueprint(group_blueprint)

@@ -13,7 +13,7 @@ from util.decorators.errorHandler import MongoErrorHandler
 class User(Document):
     """User Collection"""
 
-    _id = ObjectIdField(default=ObjectId())
+    _id = ObjectIdField(default=ObjectId, primary_key=True)
     firstName = StringField(max_length=50, required=True)
     lastName = StringField(max_length=50, required=True)
     email = EmailField(max_length=50, required=True, unique=True)
@@ -31,7 +31,6 @@ class User(Document):
 
     @classmethod
     def get_by_email(cls, email):
-
         """Retrieve user by email"""
         data = User.objects(email=email).first()
         if data is not None:
