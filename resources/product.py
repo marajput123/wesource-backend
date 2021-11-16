@@ -2,16 +2,18 @@
 
 """CRUD REST-API For Product"""
 from http import HTTPStatus
+from bson import json_util
 from bson.objectid import ObjectId
 from flask import json, Blueprint, request
 from flask_restful import Resource, reqparse, Api
 from mongoengine import ValidationError
+from bson import json_util
 from util.decorators.auth import authenticated
 from util.decorators.errorHandler import MongoErrorHandler, exception_handler
 from util.helper.helper_functions import clean_arguments, clean_product_queries
 from models.Product import Product as product_model
 from models.Group import Group as group_model
-from bson import json_util
+
 
 product_blueprint = Blueprint("product_api", __name__)
 api = Api(product_blueprint)
@@ -162,7 +164,7 @@ class ProductsLanding(Resource):
     @classmethod
     @exception_handler
     def get(cls):
-        """Handles the get request and returns the number of products specified for the landing page"""
+        """A get request that returns the number of specified product for the landing page"""
         num_product = request.args.get("num", 3, type=int)
         if num_product <= 0:
             # Does not currently check upperlimit so db size

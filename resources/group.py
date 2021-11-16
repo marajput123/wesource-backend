@@ -1,3 +1,5 @@
+# pylint: disable=no-member
+
 """CRUD REST-API For Product"""
 from http import HTTPStatus
 from flask import json, Blueprint, request
@@ -6,8 +8,6 @@ from models.Group import Group as group_model
 from models.Product import Product as product_model
 from util.decorators.auth import authenticated
 from util.decorators.errorHandler import exception_handler
-from util.helper.helper_functions import clean_arguments
-from bson.objectid import ObjectId
 
 
 group_blueprint = Blueprint("group_api", __name__)
@@ -72,7 +72,7 @@ class GroupLanding(Resource):
 
         """Handles the get request and returns the number of products specified for the landing page"""
 
-        # Takes in a query of num which represents the number of delivered product to query for
+        # Takes in an arg of num, the number of delivered product to query for
         num_delivered = request.args.get("num", 3, type=int)
         if num_delivered <= 0:
             # Does not currently check upperlimit so db size
