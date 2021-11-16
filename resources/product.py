@@ -147,6 +147,7 @@ class Products(Resource):
                 "total_count": product_count,
             }
             return json_response, HTTPStatus.ACCEPTED
+
             # return paginated_products.to_json(), 200
         products = product_model.objects.all()
         json_response = {
@@ -172,6 +173,7 @@ class ProductsLanding(Resource):
         # Gets the set quantity of random document from the db
         products = product_model.objects.aggregate({"$sample": {"size": num_product}})
         return json.loads(json_util.dumps(products)), HTTPStatus.OK
+
 
 
 api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
