@@ -95,4 +95,3 @@ class GroupLanding(Resource):
 api.add_resource(Group, "/api/group/<string:group_id>", endpoint="group_by_id")
 api.add_resource(Group, "/api/group", endpoint="group")
 api.add_resource(GroupLanding, "/api/group/landing", endpoint="group_landing")
-
