@@ -1,3 +1,4 @@
+aniso8601==9.0.1
 astroid==2.8.2
 atomicwrites==1.4.0
 attrs==21.2.0
@@ -6,11 +7,12 @@ click==8.0.1
 colorama==0.4.4
 dnspython==1.16.0
 Flask==2.0.1
+Flask-Cors==3.0.10
+Flask-RESTful==0.3.9
 iniconfig==1.1.1
 isort==5.9.3
 itsdangerous==2.0.1
 Jinja2==3.0.1
-pyjwt==2.3.0
 lazy-object-proxy==1.6.0
 MarkupSafe==2.0.1
 mccabe==0.6.1
@@ -21,11 +23,14 @@ pathspec==0.9.0
 platformdirs==2.4.0
 pluggy==1.0.0
 py==1.10.0
+PyJWT==2.3.0
 pylint==2.11.1
 pymongo==3.12.0
 pyparsing==2.4.7
 pytest==6.2.5
+pytz==2021.3
 regex==2021.10.8
+six==1.16.0
 toml==0.10.2
 tomli==1.2.1
 typing-extensions==3.10.0.2

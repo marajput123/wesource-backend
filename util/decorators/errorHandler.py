@@ -1,5 +1,4 @@
 """Module for global error handling"""
-from flask.json import jsonify
 
 
 def exception_handler(func):
@@ -11,6 +10,7 @@ def exception_handler(func):
             return result
         # pylint: disable = broad-except
         except Exception as error:
+            print(error)
             return format_and_return_error(error)
 
     inner.__name__ = func.__name__
@@ -21,13 +21,15 @@ def format_and_return_error(error):
     """Format exception and return it as response"""
     status = getattr(error, "status", 500)
     message = getattr(error, "message", error.args)
-    return jsonify({"message": message}), status
+    if isinstance(message, tuple) == tuple:
+        message = message[0]
+    return {"message": message}, status
 
 
 class MongoErrorHandler(Exception):
     """MongoErrorHandler for errors related to mongodb"""
 
     def __init__(self, message, status):
-        Exception.__init__()
+        Exception.__init__(self)
         self.message = message
         self.status = status
