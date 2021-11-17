@@ -1,4 +1,5 @@
 # pylint: disable=no-member
+# pylint: disable=unused-argument
 
 """CRUD REST-API For Product"""
 from http import HTTPStatus
