@@ -29,7 +29,7 @@ class Group(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def post(cls, group_id):
+    def post(cls, group_id, current_user):
         """Add user to the group"""
         body = request.get_json()
         group = group_model.get_by_id(group_id)
@@ -40,7 +40,7 @@ class Group(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def put(cls, group_id):
+    def put(cls, group_id, current_user):
         """Update group"""
         body = request.get_json()
         group = group_model.get_by_id(group_id).first().modify(**body)

@@ -54,7 +54,7 @@ class Product(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def post(cls):
+    def post(cls, current_user):
         """Handles the post request and creates a new product"""
         body = clean_arguments(product_args)
         product_id = ObjectId()
@@ -78,7 +78,7 @@ class Product(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def put(cls, product_id):
+    def put(cls, product_id, current_user):
         """Handles the put request to update a single product"""
         body = clean_arguments(product_args)
         try:
@@ -94,7 +94,7 @@ class Product(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def delete(cls, product_id):
+    def delete(cls, product_id, current_user):
         """Handles the delete request to delete a single product"""
         product = product_model.objects(_id=product_id)
         group = group_model.objects(product_id=product_id)
