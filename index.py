@@ -95,5 +95,3 @@ def update(username):
     user.modify(**body)
     user.save()
     return {"message": "accounted updated"}, 200
-
-     
