@@ -9,7 +9,7 @@ from mongoengine.fields import (
     EmbeddedDocument,
     StringField,
     DecimalField,
-    DateTimeField
+    DateTimeField,
 )
 
 
