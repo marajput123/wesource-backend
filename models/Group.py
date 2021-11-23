@@ -2,8 +2,7 @@
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
-from mongoengine.fields import ListField, StringField, DateTimeField
-from datetime import datetime
+from mongoengine.fields import ListField
 
 # pylint: disable=no-member
 class Group(Document):
