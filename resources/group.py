@@ -1,9 +1,10 @@
 # pylint: disable=no-member
+# pylint: disable=unused-argument
 
 """CRUD REST-API For Product"""
 from http import HTTPStatus
 from flask import json, Blueprint, request
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Api, Resource
 from models.Group import Group as group_model
 from models.Product import Product as product_model
 from util.decorators.auth import authenticated
@@ -12,21 +13,6 @@ from util.decorators.errorHandler import exception_handler
 
 group_blueprint = Blueprint("group_api", __name__)
 api = Api(group_blueprint)
-
-group_args = reqparse.RequestParser()
-group_args.add_argument(
-    "product_id", type=str, help="Problem with Product Id validation"
-)
-group_args.add_argument(
-    "organizer_id", type=str, help="Problem with Organizer Id value"
-)
-group_args.add_argument(
-    "user_ids",
-    type=list,
-    help="Problem with the list of the user ids' value",
-    action="append",
-)
-group_args.add_argument("status", type=int, help="Problem with status value")
 
 
 class Group(Resource):
@@ -44,7 +30,7 @@ class Group(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def post(cls, group_id):
+    def post(cls, group_id, current_user):
         """Add user to the group"""
         body = request.get_json()
         group = group_model.get_by_id(group_id)
@@ -55,7 +41,7 @@ class Group(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def put(cls, group_id):
+    def put(cls, group_id, current_user):
         """Update group"""
         body = request.get_json()
         group = group_model.get_by_id(group_id).first().modify(**body)
