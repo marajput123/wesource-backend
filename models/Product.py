@@ -1,4 +1,5 @@
 """Product Model"""
+from datetime import datetime
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
@@ -10,7 +11,6 @@ from mongoengine.fields import (
     DecimalField,
     DateTimeField
 )
-from datetime import datetime
 
 
 class Item(EmbeddedDocument):
