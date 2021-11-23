@@ -1,4 +1,4 @@
-"""User Model"""
+"""Group Model"""
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
@@ -10,12 +10,9 @@ class Group(Document):
     """Group Collection"""
 
     _id = ObjectIdField(default=ObjectId, primary_key=True)
-    date = DateTimeField(default=datetime.utcnow)
     product_id = ObjectIdField(db_field="Product", required=True)
     organizer_id = ObjectIdField(db_field="Organizer", required=True)
     user_id = ListField(ObjectIdField(db_field="User", required=True))
-    imageURL = StringField()
-    status = StringField(required=True)
 
     @classmethod
     def get_by_id(cls, group_id):

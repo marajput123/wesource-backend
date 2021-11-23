@@ -8,8 +8,7 @@ from models.Review import Review
 from models.Group import Group
 
 ## Replace it with you DB if you need to
-# MONGODB_URL = "mongodb+srv://capstone:Capstone123@wesourcecluster01.ctf3x.mongodb.net/WesourceDatabase?retryWrites=true&w=majority"  # pylint: disable=line-too-long
-MONGODB_URL = "mongodb+srv://test2:123@cluster0.fujai.mongodb.net/test?authSource=admin&replicaSet=atlas-g0kse0-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true"
+MONGODB_URL = "mongodb+srv://capstone:Capstone123@wesourcecluster01.ctf3x.mongodb.net/WesourceDatabase?retryWrites=true&w=majority"  # pylint: disable=line-too-long
 
 connect(host=MONGODB_URL)
 
