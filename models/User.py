@@ -21,7 +21,8 @@ class User(Document):
     password = StringField(required=True)  # password hash
     rating = IntField(default=0)
     groupId = ListField(ObjectIdField(db_field="Group"))
-
+ reviewId = ListField(ObjectIdField(db_field="Review"))
+ 
     @classmethod
     def get_by_username(cls, username):
         """Retrieve user by username"""
