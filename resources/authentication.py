@@ -18,12 +18,14 @@ user_args = reqparse.RequestParser()
 
 register_args.add_argument("firstName", type=str, help="First name is required")
 register_args.add_argument("lastName", type=str, help="lastName name is required")
-register_args.add_argument("email", type=str, help="email is required")
+register_args.add_argument("email", type=str, help="Email is required")
 register_args.add_argument("username", type=str, help="username is required")
 register_args.add_argument("password", type=str, help="password is required")
 
 user_args.add_argument("firstName", type=str, help="First name is required")
-user_args.add_argument("lastName", type=str, help="last name is required")
+user_args.add_argument("lastName", type=str, help="Last name is required")
+user_args.add_argument("username", type=str, help="Username is required")
+user_args.add_argument("email", type=str, help="Email is required")
 
 
 class AuthenticationLogin(Resource):
@@ -48,11 +50,11 @@ class AuthenticationLogin(Resource):
 class Authentication(Resource):
     """REST Endpoint for accessing/creatin User"""
 
-    # GET - http://127.0.0.1:5000/api/login/<string:user_id>
-    @staticmethod
+    # GET - http://127.0.0.1:5000/api/auth/<string:user_id>
+    @classmethod
     @exception_handler
     @authenticated
-    def get(user_id):
+    def get(cls, user_id, current_user):
         """GET user info"""
         user = User.objects(_id=user_id)
         return json.loads(user.to_json()), 200
@@ -74,17 +76,17 @@ class Authentication(Resource):
             ) from exception
 
     # PUT - http://127.0.0.1:5000/api/auth/<string:user_id>
-    @staticmethod
+    @classmethod
     @exception_handler
-    def put(user_id):
+    @authenticated
+    def put(cls, user_id, current_user):
         """UPDATE user"""
         try:
             body = clean_arguments(user_args)
             user = User.objects(_id=user_id).modify(**body)
             user.save()
-            return {"success": True}, HTTPStatus.CREATED
+            return {"success": True}, HTTPStatus.OK
         except Exception as exception:
-            print(exception)
             raise MongoErrorHandler(
                 "User could not be updated", HTTPStatus.BAD_REQUEST
             ) from exception

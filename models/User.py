@@ -2,7 +2,7 @@
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
-from mongoengine.fields import EmailField, IntField, StringField
+from mongoengine.fields import EmailField, IntField, StringField, ListField
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -20,6 +20,7 @@ class User(Document):
     username = StringField(max_length=30, min_length=6, required=True, unique=True)
     password = StringField(required=True)  # password hash
     rating = IntField(default=0)
+    groupId = ListField(ObjectIdField(db_field="User", required=True))
 
     @classmethod
     def get_by_username(cls, username):
