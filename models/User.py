@@ -20,7 +20,7 @@ class User(Document):
     username = StringField(max_length=30, min_length=6, required=True, unique=True)
     password = StringField(required=True)  # password hash
     rating = IntField(default=0)
-    groupId = ListField(ObjectIdField(db_field="User", required=True))
+    groupId = ListField(ObjectIdField(db_field="Group"))
 
     @classmethod
     def get_by_username(cls, username):
