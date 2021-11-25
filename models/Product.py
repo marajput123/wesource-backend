@@ -1,4 +1,5 @@
 """Product Model"""
+from datetime import datetime
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
@@ -8,6 +9,7 @@ from mongoengine.fields import (
     EmbeddedDocument,
     StringField,
     DecimalField,
+    DateTimeField,
 )
 
 
@@ -31,4 +33,7 @@ class Product(Document):
     price = DecimalField(min_value=0, precision=2, required=True)
     quantity = IntField(default=1)
     imageURL = StringField()
+    date = DateTimeField(default=datetime.utcnow)
+    status = StringField(required=True)
+    organizer_username = StringField(db_field="Organizer", required=True)
     items = EmbeddedDocumentListField("Item")

@@ -16,7 +16,7 @@ api = Api(group_blueprint)
 
 
 class Group(Resource):
-    """CRUD endpoints for Groups"""
+    """CRUD endpoints for Group"""
 
     # GET - http://127.0.0.1:5000/api/group/<string:group_id>
     @classmethod

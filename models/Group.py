@@ -1,8 +1,8 @@
-"""User Model"""
+"""Group Model"""
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
-from mongoengine.fields import ListField, StringField
+from mongoengine.fields import ListField
 
 # pylint: disable=no-member
 class Group(Document):
@@ -10,9 +10,8 @@ class Group(Document):
 
     _id = ObjectIdField(default=ObjectId, primary_key=True)
     product_id = ObjectIdField(db_field="Product", required=True)
-    organizer_id = ObjectIdField(db_field="User", required=True)
-    user_ids = ListField(ObjectIdField(db_field="User", required=True))
-    status = StringField(required=True)
+    organizer_id = ObjectIdField(db_field="Organizer", required=True)
+    user_id = ListField(ObjectIdField(db_field="User", required=True))
 
     @classmethod
     def get_by_id(cls, group_id):
