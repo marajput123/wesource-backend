@@ -54,6 +54,7 @@ class Authentication(Resource):
     @classmethod
     @exception_handler
     @authenticated
+    # pylint: disable=unused-argument
     def get(cls, user_id, current_user):
         """GET user info"""
         user = User.objects(_id=user_id)
@@ -79,6 +80,7 @@ class Authentication(Resource):
     @classmethod
     @exception_handler
     @authenticated
+    # pylint: disable=unused-argument
     def put(cls, user_id, current_user):
         """UPDATE user"""
         try:
