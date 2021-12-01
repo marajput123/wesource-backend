@@ -20,7 +20,7 @@ class User(Document):
     username = StringField(max_length=30, min_length=6, required=True, unique=True)
     password = StringField(required=True)  # password hash
     rating = IntField(default=0)
-    groupId = ListField(ObjectIdField(db_field="Group"))
+    productId = ListField(ObjectIdField(db_field="Product"))
     reviewId = ListField(ObjectIdField(db_field="Review"))
 
     @classmethod
