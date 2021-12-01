@@ -1,9 +1,19 @@
 [
     {
         "_id": "61697da2a9fd362910a4a512",
-        "product_id": "618e2cb3063b059b6b182f62",
+        "product_id": "61697bf1a9fd362910a4a582",
         "organizer_id": "61847177883ef8cf3bc778ff",
         "user_id": [
+            "61697da2a9fd362910a4a585",
+            "61697dd7a9fd362910a4a586"
+        ]
+    },
+    {
+        "_id": "61a51da20d91bf134f435a69",
+        "product_id": "61697bf1a9fd362910a4a582",
+        "organizer_id": "61847177883ef8cf3bc778ff",
+        "user_id": [
+            "61697da2a9fd362910a4a585",
             "61697dd7a9fd362910a4a586"
         ]
     }
