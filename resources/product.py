@@ -149,13 +149,50 @@ class Products(Resource):
             }
             return json_response, HTTPStatus.ACCEPTED
 
-            # return paginated_products.to_json(), 200
         products = product_model.objects.all()
         json_response = {
             "data": json.loads(products.to_json()),
             "total_count": product_count,
         }
         return json_response, HTTPStatus.OK
+
+
+class UserProduct(Resource):
+    """CRUD for displaying all of the user's joined groups"""
+
+    # GET - http://127.0.0.1:5000/api/products/joined-groups
+    @classmethod
+    @exception_handler
+    @authenticated
+    def get(cls, current_user):
+        """GET method that uses the Product collection rather than Group"""
+        # Get the user's productId list after being authenticated and page number
+        user_groups = current_user["productId"]
+        page_number = request.args.get("page")
+
+        # If no page number is provided default to page 1
+        if page_number is None:
+            page_number = 1
+
+        # offset helps determine which product object to start with when paginating
+        group_limit = 15
+        offset = (int(page_number) - 1) * group_limit
+
+        # Products are filtered by whether the id is in the user['productId']
+        # The filtered product are ordered in decending order by the _id
+        # Assume that the most recent _id are displayed(most recent group joined)
+        paginated_groups = (
+            product_model.objects.filter(_id__in=user_groups)
+            .skip(offset)
+            .limit(group_limit)
+            .order_by("-_id")
+        )
+        group_count = len(paginated_groups)
+        json_response = {
+            "data": json.loads(paginated_groups.to_json()),
+            "total_count": group_count,
+        }
+        return json_response, HTTPStatus.ACCEPTED
 
 
 class ProductsLanding(Resource):
@@ -178,5 +215,6 @@ class ProductsLanding(Resource):
 
 api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
 api.add_resource(Product, "/api/product", endpoint="product")
-api.add_resource(Products, "/api/products")
+api.add_resource(Products, "/api/products", endpoint="products")
+api.add_resource(UserProduct, "/api/products/joined-groups", endpoint="joined_groups")
 api.add_resource(ProductsLanding, "/api/products/landing", endpoint="product_landing")
