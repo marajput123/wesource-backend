@@ -78,5 +78,33 @@
                 "imageURL": "static/images/238792.jpeg"
             }
         ]
+    },
+    {
+        "_id": "61697c5fa9fd362910a4a584",
+        "title": "Action figure box",
+        "description": "Acion figure box containing action figures",
+        "price": 695,
+        "quantity": 1,
+        "imageURL": "/static/images/589723.jpeg",
+        "status": "Funding",
+        "organizer_username": "John Doe",
+        "items": [
+            {
+                "_id": "6169790ea9fd362910a4a581",
+                "title": "Mini action figure #1",
+                "description": "Mini action figure #1 form Japan",
+                "price": 35,
+                "quantity": 7,
+                "imageURL": "static/images/9808237.jpeg"
+            },
+            {
+                "_id": "61697903a9fd362910a4a580",
+                "title": "Mini action figure #2",
+                "description": "Mini action figure #2 from Japan",
+                "price": 75,
+                "quantity": 6,
+                "imageURL": "static/images/2839829.jpeg"
+            }
+        ]
     }
 ]
