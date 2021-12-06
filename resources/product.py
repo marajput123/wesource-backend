@@ -55,7 +55,7 @@ class Product(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def post(cls, current_user):
+    def post(cls, current_user=None):
         """Handles the post request and creates a new product"""
         body = clean_arguments(product_args)
         product_id = ObjectId()
@@ -79,7 +79,7 @@ class Product(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def put(cls, product_id, current_user):
+    def put(cls, product_id, current_user=None):
         """Handles the put request to update a single product"""
         body = clean_arguments(product_args)
         try:
@@ -160,12 +160,19 @@ class Products(Resource):
 class UserProduct(Resource):
     """CRUD for displaying all of the user's joined groups"""
 
-    # GET - http://127.0.0.1:5000/api/products/joined-groups
+    # GET - http://127.0.0.1:5000/api/user/<string:user_id>/joined-groups
     @classmethod
     @exception_handler
     @authenticated
-    def get(cls, current_user):
+    def get(cls, user_id, current_user=None):
         """GET method that uses the Product collection rather than Group"""
+
+        # user_id is not used but will just be checked
+        if user_id != str(current_user["_id"]):
+            return {
+                "message": "User is not allowed to get other user's joined groups"
+            }, HTTPStatus.UNAUTHORIZED
+
         # Get the user's productId list after being authenticated and page number
         user_groups = current_user["productId"]
         page_number = request.args.get("page")
@@ -216,5 +223,7 @@ class ProductsLanding(Resource):
 api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
 api.add_resource(Product, "/api/product", endpoint="product")
 api.add_resource(Products, "/api/products", endpoint="products")
-api.add_resource(UserProduct, "/api/products/joined-groups", endpoint="joined_groups")
+api.add_resource(
+    UserProduct, "/api/user/<string:user_id>/joined-groups", endpoint="joined_groups"
+)
 api.add_resource(ProductsLanding, "/api/products/landing", endpoint="product_landing")
