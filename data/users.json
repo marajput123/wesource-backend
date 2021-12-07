@@ -1,23 +1,34 @@
 [
     {
-        "_id":"61697da2a9fd362910a4a585",
+        "_id": "61697da2a9fd362910a4a585",
         "firstName": "Muhammad",
-        "lastName":"Rajput",
-        "email":"dummy@gmail.com",
-        "username":"dummy101",
-        "password":"909a30df0827e17bc891",
-        "rating":1,
-        "reviewId": ["61697dd7a9fd362910a4a088"]
-        
+        "lastName": "Rajput",
+        "email": "dummy@gmail.com",
+        "username": "dummy101",
+        "password": "909a30df0827e17bc891",
+        "rating": 8,
+        "productId": [
+            "61697c03a9fd362910a4a583",
+            "61697bf1a9fd362910a4a582"
+        ],
+        "reviewId": [
+            "61697dd7a9fd362910a4a088"
+        ]
     },
     {
-        "_id":"61697dd7a9fd362910a4a586",
+        "_id": "61697dd7a9fd362910a4a586",
         "firstName": "Donald",
-        "lastName":"Duck",
-        "email":"ducky@gmail.com",
-        "username":"dduck99",
-        "password":"90628b781f7e17bc891",
-        "rating":5,
-        "reviewId": ["61697da2a9fd362910a4a987"]
+        "lastName": "Duck",
+        "email": "ducky@gmail.com",
+        "username": "dduck99",
+        "password": "90628b781f7e17bc891",
+        "rating": 4,
+        "productId": [
+            "61697c03a9fd362910a4a583",
+            "61697c5fa9fd362910a4a584"
+        ],
+        "reviewId": [
+            "61697da2a9fd362910a4a987"
+        ]
     }
 ]
