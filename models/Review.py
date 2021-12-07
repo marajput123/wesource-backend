@@ -15,3 +15,7 @@ class Review(Document):
     reviewee_id = ObjectIdField(required=True)
     description = StringField(min_value=5, max_length=250, required=True)
     rating = IntField(min_value=1, max_value=5, required=True)
+
+    def get_id(self):
+        """Return objectId"""
+        return self._id
