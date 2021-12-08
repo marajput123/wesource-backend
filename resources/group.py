@@ -81,8 +81,7 @@ class Group(Resource):
             for field in remove_fields:
                 del user[field]
             users_list.append(user)
-        group["user_id"] = users_list
-        
+        group["user_id"] = users_list        
         return group, HTTPStatus.OK
 
     @classmethod
