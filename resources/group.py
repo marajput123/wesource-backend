@@ -43,12 +43,9 @@ class Group(Resource):
         # Populate the product_id with the object
         product_id = group["Product"]["$oid"]
         product = json.loads(product_model.objects(_id=product_id).first().to_json())
-        print(product)
         # Return date e.g. December 07,2021
         timestamp = product["date"]["$date"]
-        # timestamp is in millisecond and must divide by 1000 to convert to secs
         date = cls._convert_to_date(timestamp)
-        # date = product["date"].strftime("%B %d,%Y")
         product["date"] = date
         group["Product"] = product
 
@@ -81,7 +78,8 @@ class Group(Resource):
             for field in remove_fields:
                 del user[field]
             users_list.append(user)
-        group["user_id"] = users_list        
+        group["user_id"] = users_list
+
         return group, HTTPStatus.OK
 
     @classmethod
