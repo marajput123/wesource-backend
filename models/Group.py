@@ -1,6 +1,6 @@
 """Group Model"""
-from bson.objectid import ObjectId
 from datetime import datetime
+from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
 from mongoengine.fields import (
@@ -19,6 +19,7 @@ class Announcement(EmbeddedDocument):
     title = StringField(max_length=75, required=True)
     description = StringField(max_length=250, required=True)
     date = DateField(default=datetime.utcnow)
+
 
 class Group(Document):
     """Group Collection"""
