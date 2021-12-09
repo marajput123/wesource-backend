@@ -7,7 +7,7 @@
         "quantity": 1,
         "imageURL": "/static/images/2837912.jpeg",
         "status": "Funding",
-        "organizer_username": "John Doe",
+        "organizer_username": "dummy101",
         "items": [
             {
                 "_id": "6169715cf0eb0d8d739f7538",
@@ -43,7 +43,7 @@
         "quantity": 1,
         "imageURL": "/static/images/9032920.jpeg",
         "status": "Funding",
-        "organizer_username": "John Doe",
+        "organizer_username": "dduck99",
         "items": [
             {
                 "_id": "6169759ca9fd362910a4a57c",

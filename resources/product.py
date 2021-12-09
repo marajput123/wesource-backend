@@ -55,7 +55,7 @@ class Product(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def post(cls, current_user):
+    def post(cls, current_user=None):
         """Handles the post request and creates a new product"""
         body = clean_arguments(product_args)
         body["organizer_username"] = current_user.username
@@ -81,7 +81,7 @@ class Product(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def put(cls, product_id, current_user):
+    def put(cls, product_id, current_user=None):
         """Handles the put request to update a single product"""
         body = clean_arguments(product_args)
         try:
@@ -149,14 +149,57 @@ class Products(Resource):
                 "total_count": product_count,
             }
             return json_response, HTTPStatus.ACCEPTED
-        # prod = product_model.objects(title="Utensil02")
-        # return paginated_products.to_json(), 200
         products = product_model.objects(**query)
         json_response = {
             "data": json.loads(products.to_json()),
             "total_count": product_count,
         }
         return json_response, HTTPStatus.OK
+
+
+class UserProduct(Resource):
+    """CRUD for displaying all of the user's joined groups"""
+
+    # GET - http://127.0.0.1:5000/api/user/<string:user_id>/joined-groups
+    @classmethod
+    @exception_handler
+    @authenticated
+    def get(cls, user_id, current_user=None):
+        """GET method that uses the Product collection rather than Group"""
+
+        # user_id is not used but will just be checked
+        if user_id != str(current_user["_id"]):
+            return {
+                "message": "User is not allowed to get other user's joined groups"
+            }, HTTPStatus.UNAUTHORIZED
+
+        # Get the user's productId list after being authenticated and page number
+        user_groups = current_user["productId"]
+        page_number = request.args.get("page")
+
+        # If no page number is provided default to page 1
+        if page_number is None:
+            page_number = 1
+
+        # offset helps determine which product object to start with when paginating
+        group_limit = 15
+        offset = (int(page_number) - 1) * group_limit
+
+        # Products are filtered by whether the id is in the user['productId']
+        # The filtered product are ordered in decending order by the _id
+        # Assume that the most recent _id are displayed(most recent group joined)
+        paginated_groups = (
+            product_model.objects.filter(_id__in=user_groups)
+            .skip(offset)
+            .limit(group_limit)
+            .order_by("-_id")
+        )
+        group_count = len(paginated_groups)
+        json_response = {
+            "data": json.loads(paginated_groups.to_json()),
+            "total_count": group_count,
+        }
+        return json_response, HTTPStatus.ACCEPTED
 
 
 class ProductsLanding(Resource):
@@ -179,5 +222,8 @@ class ProductsLanding(Resource):
 
 api.add_resource(Product, "/api/product/<string:product_id>", endpoint="product_by_id")
 api.add_resource(Product, "/api/product", endpoint="product")
-api.add_resource(Products, "/api/products")
+api.add_resource(Products, "/api/products", endpoint="products")
+api.add_resource(
+    UserProduct, "/api/user/<string:user_id>/joined-groups", endpoint="joined_groups"
+)
 api.add_resource(ProductsLanding, "/api/products/landing", endpoint="product_landing")

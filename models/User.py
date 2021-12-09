@@ -4,8 +4,6 @@ from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
 from mongoengine.fields import EmailField, IntField, StringField, ListField
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
 from util.decorators.errorHandler import MongoErrorHandler
 
 
@@ -20,8 +18,9 @@ class User(Document):
     username = StringField(max_length=30, min_length=6, required=True, unique=True)
     password = StringField(required=True)  # password hash
     rating = IntField(default=0)
-    groupId = ListField(ObjectIdField(db_field="Group"))
+    productId = ListField(ObjectIdField(db_field="Product"))
     reviewId = ListField(ObjectIdField(db_field="Review"))
+    imageURL = StringField()
 
     @classmethod
     def get_by_username(cls, username):

@@ -40,7 +40,7 @@
 Create users from the ./data/users.json file
 
 ```sh
-> db_populateScript.py cu   
+> db_populate_script.py cu   
 ```
 
 #### 5.2 Creating Products
@@ -48,19 +48,37 @@ Create users from the ./data/users.json file
 Create products from the ./data/products.json file
 
 ```sh
-> db_populateScript.py cp   
+> db_populate_script.py cp   
 ```
 
-#### 5.4 Creating multiple collections
+#### 5.3 Creating Group
+
+Create products from the ./data/group.json file
+
+```sh
+> db_populate_script.py cg   
+```
+
+#### 5.4 Creating Group
+
+Create products from the ./data/review.json file
+
+```sh
+> db_populate_script.py cr   
+```
+
+#### 5.5 Creating multiple collections
 Create mulitple collections from the ./data folder
 ```sh
 # Create User collection and Product collection
 > db_populateScript.py cu cp 
+# Create Group collection and Review collection
+> db_populateScript.py cg cr 
 # Create all collections
-> db_populateScript.py cu cp
+> db_populate_script.py cu cp cg cr
 ```
 
-#### 5.5 Dropping Collections
+#### 5.6 Dropping Collections
 
 Dropping collections from the databse
 
@@ -69,8 +87,12 @@ Dropping collections from the databse
 > db_populateScript.py du 
 # Drop Product collection 
 > db_populateScript.py dp
+# Drop Group collection 
+> db_populateScript.py dg
+# Drop Review collection 
+> db_populateScript.py dr
 # Drop all collections
-> db_populateScript.py delete_all
+> db_populate_script.py delete_all
 ```
 
 ***
