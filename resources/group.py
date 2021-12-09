@@ -23,7 +23,7 @@ class Group(Resource):
     # GET - http://127.0.0.1:5000/api/group/<string:group_id>
     @classmethod
     @exception_handler
-    def get(cls, group_id):
+    def get(cls, group_id):  # pylint: disable-msg=too-many-locals
         """A get request that returns the entire populated group object"""
         group = group_model.get_by_id(group_id)
         user_ids = group["user_id"]
@@ -139,8 +139,10 @@ class GroupLanding(Resource):
         products = product_model.objects(_id__in=product_id)
         return json.loads(products.to_json()), HTTPStatus.OK
 
+
 class GroupQuery(Resource):
     """CRUD for quering groups"""
+
     # GET - http://127.0.0.1:5000/api/group/<params>
     @classmethod
     @exception_handler
@@ -151,8 +153,7 @@ class GroupQuery(Resource):
         product_ids = []
         for group in groups:
             product_ids.append(str(group.product_id))
-        return {"product_ids":product_ids}, HTTPStatus.OK
-
+        return {"product_ids": product_ids}, HTTPStatus.OK
 
 
 api.add_resource(Group, "/api/group/<string:group_id>", endpoint="group_by_id")

@@ -65,7 +65,7 @@ class Product(Resource):
         new_group = group_model(
             product_id=product_id,
             organizer_id=request.json.get("user_id"),
-            user_id=[request.json.get("user_id")]
+            user_id=[request.json.get("user_id")],
         )
         try:
             new_product.save()
