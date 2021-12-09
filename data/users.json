@@ -6,6 +6,7 @@
         "email": "dummy@gmail.com",
         "username": "dummy101",
         "password": "909a30df0827e17bc891",
+        "imageURL": "static/images/7892397.jpeg",
         "rating": 8,
         "productId": [
             "61697c03a9fd362910a4a583",
@@ -22,6 +23,7 @@
         "email": "ducky@gmail.com",
         "username": "dduck99",
         "password": "90628b781f7e17bc891",
+        "imageURL": "static/images/7892398.jpeg",
         "rating": 4,
         "productId": [
             "61697c03a9fd362910a4a583",

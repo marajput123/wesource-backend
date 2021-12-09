@@ -2,19 +2,37 @@
     {
         "_id": "61697da2a9fd362910a4a512",
         "product_id": "61697bf1a9fd362910a4a582",
-        "organizer_id": "61847177883ef8cf3bc778ff",
+        "organizer_id": "61697da2a9fd362910a4a585",
         "user_id": [
-            "61697da2a9fd362910a4a585",
             "61697dd7a9fd362910a4a586"
+        ],
+        "announcement": [
+            {
+                "title": "Announcement #1",
+                "description": "Hello World"
+            },
+            {
+                "title": "Announcement #2",
+                "description": "Hello World2"
+            }
         ]
     },
     {
         "_id": "61a51da20d91bf134f435a69",
-        "product_id": "61697bf1a9fd362910a4a582",
-        "organizer_id": "61847177883ef8cf3bc778ff",
+        "product_id": "61697bf1a9fd362910a4a583",
+        "organizer_id": "61697dd7a9fd362910a4a586",
         "user_id": [
-            "61697da2a9fd362910a4a585",
-            "61697dd7a9fd362910a4a586"
+            "61697da2a9fd362910a4a585"
+        ],
+        "announcement": [
+            {
+                "title": "Announcement #1",
+                "description": "Hello World"
+            },
+            {
+                "title": "Announcement #2",
+                "description": "Hello World2"
+            }
         ]
     }
 ]
