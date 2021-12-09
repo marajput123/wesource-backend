@@ -38,6 +38,7 @@ class Group(Resource):
         group.save()
         return json.loads(group.to_json()), HTTPStatus.CREATED
 
+    # PUT - http://127.0.0.1:5000/api/group/<string:group_id>
     @classmethod
     @exception_handler
     @authenticated
@@ -77,7 +78,23 @@ class GroupLanding(Resource):
         products = product_model.objects(_id__in=product_id)
         return json.loads(products.to_json()), HTTPStatus.OK
 
+class GroupQuery(Resource):
+
+    # GET - http://127.0.0.1:5000/api/group/<params>
+    @classmethod
+    @exception_handler
+    # @authenticated
+    def get(cls):
+        groups = group_model.objects(user_id=request.args["user_id"])
+        product_ids = []
+        print("here")
+        for group in groups:
+            product_ids.append(str(group.product_id))
+        print(product_ids)
+        return {"product_ids":product_ids}, HTTPStatus.OK
+
+
 
 api.add_resource(Group, "/api/group/<string:group_id>", endpoint="group_by_id")
-api.add_resource(Group, "/api/group", endpoint="group")
+api.add_resource(GroupQuery, "/api/group", endpoint="group")
 api.add_resource(GroupLanding, "/api/group/landing", endpoint="group_landing")

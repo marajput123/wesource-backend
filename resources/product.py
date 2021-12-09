@@ -58,12 +58,14 @@ class Product(Resource):
     def post(cls, current_user):
         """Handles the post request and creates a new product"""
         body = clean_arguments(product_args)
+        body["organizer_username"] = current_user.username
+        body["status"] = "Funding"
         product_id = ObjectId()
         new_product = product_model(**body, _id=product_id)
         new_group = group_model(
             product_id=product_id,
             organizer_id=request.json.get("user_id"),
-            status="Funding",
+            user_id=[request.json.get("user_id")]
         )
         try:
             new_product.save()
@@ -121,7 +123,6 @@ class Products(Resource):
         page_number = request.args.get("page")
         query = clean_product_queries(request)
         product_count = len(product_model.objects(**query))
-
         # if no page number is provided then get all the product from the DB
         if page_number is not None:
             # if search query is specified then find product titles that contain that query
@@ -148,9 +149,9 @@ class Products(Resource):
                 "total_count": product_count,
             }
             return json_response, HTTPStatus.ACCEPTED
-
-            # return paginated_products.to_json(), 200
-        products = product_model.objects.all()
+        # prod = product_model.objects(title="Utensil02")
+        # return paginated_products.to_json(), 200
+        products = product_model.objects(**query)
         json_response = {
             "data": json.loads(products.to_json()),
             "total_count": product_count,
