@@ -69,8 +69,10 @@ class Group(Resource):
         # but for some reason the other fields will be included though they'll be empty
         # and will be removed after the query
         users = (
-            user_model.objects().fields(_id=1, username=1, imageURL=1).in_bulk(user_ids)
-        )
+            user_model.objects()
+            .fields(_id=1, username=1, imageURL=1)
+            .in_bulk(user_ids)  # pylint: disable-msg=protected-access
+        )  # pylint: disable-msg=protected-access
 
         users_list = []
         for uid in users:
@@ -100,9 +102,8 @@ class Group(Resource):
             group["user_id"].append(body["user_id"])
             group.save()
             return json.loads(group.to_json()), HTTPStatus.CREATED
-        except Exception as exception:
-            print(exception)
-
+        except Exception:  # pylint: disable-msg=broad-except
+            return {"message": "error"}, HTTPStatus.BAD_REQUEST
 
     # PUT - http://127.0.0.1:5000/api/group/<string:group_id>
     @classmethod
@@ -167,7 +168,7 @@ class GroupAnnouncement(Resource):
     @classmethod
     @exception_handler
     @authenticated
-    def post(cls, group_id ,current_user=None):
+    def post(cls, group_id, current_user=None):
         """POST announcement to the group"""
         try:
             body = request.get_json()
@@ -176,14 +177,14 @@ class GroupAnnouncement(Resource):
             group["announcement"].append(announcement)
             group.save()
             return json.loads(announcement.to_json()), HTTPStatus.CREATED
-        except Exception:
-            return {"message":"failed"}, HTTPStatus.BAD_REQUEST
+        except Exception:  # pylint: disable-msg=broad-except
+            return {"message": "failed"}, HTTPStatus.BAD_REQUEST
 
     # DELETE http://127.0.0.1:5000/api/group/announcement/<string:group_id>
     @classmethod
     @exception_handler
     @authenticated
-    def delete(cls, group_id ,current_user=None):
+    def delete(cls, group_id, current_user=None):
         """DELETE announcement from the group"""
         try:
             body = request.get_json()
@@ -192,22 +193,27 @@ class GroupAnnouncement(Resource):
             announcement_id = body["announcementId"]
             new_list = []
             for announcement in group["announcement"]:
-                if str(announcement._id) != str(announcement_id):
+                if str(announcement._id) != str(
+                    announcement_id
+                ):  # pylint: disable-msg=protected-access
                     new_list.append(announcement)
             group["announcement"] = new_list
             group.save()
-            return {"message":"delete"}, HTTPStatus.OK
-        except Exception as e:
-            print(e)
-            return {"message":"failed"}, HTTPStatus.BAD_REQUEST
+            return {"message": "delete"}, HTTPStatus.OK
+        except Exception:  # pylint: disable-msg=broad-except
+            return {"message": "failed"}, HTTPStatus.BAD_REQUEST
 
     @classmethod
     def _convert_to_date(cls, timestamp):
         date = datetime.fromtimestamp(timestamp / 1000).strftime("%B %d,%Y")
         return date
-        
+
 
 api.add_resource(Group, "/api/group/<string:group_id>", endpoint="group_by_id")
 api.add_resource(GroupQuery, "/api/group", endpoint="group")
-api.add_resource(GroupAnnouncement, "/api/group/announcement/<string:group_id>", endpoint="announcements")
+api.add_resource(
+    GroupAnnouncement,
+    "/api/group/announcement/<string:group_id>",
+    endpoint="announcements",
+)
 api.add_resource(GroupLanding, "/api/group/landing", endpoint="group_landing")

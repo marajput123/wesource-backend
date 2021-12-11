@@ -1,5 +1,4 @@
 """User Model"""
-from bson.json_util import default
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document

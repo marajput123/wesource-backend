@@ -30,9 +30,7 @@ product_args.add_argument("price", type=float, help="Problem with Product Price 
 product_args.add_argument(
     "quantity", type=int, help="Problem with Product Quantity value"
 )
-product_args.add_argument(
-    "imageURL", type=str, help="Problem with ImageURL value"
-)
+product_args.add_argument("imageURL", type=str, help="Problem with ImageURL value")
 product_args.add_argument(
     "items",
     type=dict,
@@ -69,9 +67,9 @@ class Product(Resource):
         new_product = product_model(**body, _id=product_id)
         new_group = group_model(
             product_id=product_id,
-            organizer_id=current_user._id,
-            user_id=[current_user._id],
-            _id=group_id
+            organizer_id=current_user._id,  # pylint: disable=W0212
+            user_id=[current_user._id],  # pylint: disable=W0212
+            _id=group_id,
         )
         try:
             new_product.save()
