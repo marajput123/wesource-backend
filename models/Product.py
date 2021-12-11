@@ -36,4 +36,5 @@ class Product(Document):
     date = DateTimeField(default=datetime.utcnow)
     status = StringField(required=True)
     organizer_username = StringField(db_field="Organizer", required=True)
+    group_id = ObjectIdField(db_field="Group", required=True)
     items = EmbeddedDocumentListField("Item")

@@ -31,6 +31,9 @@ product_args.add_argument(
     "quantity", type=int, help="Problem with Product Quantity value"
 )
 product_args.add_argument(
+    "imageURL", type=str, help="Problem with ImageURL value"
+)
+product_args.add_argument(
     "items",
     type=dict,
     help="Problem with the list of the items' value",
@@ -58,18 +61,24 @@ class Product(Resource):
     def post(cls, current_user=None):
         """Handles the post request and creates a new product"""
         body = clean_arguments(product_args)
+        group_id = ObjectId()
         product_id = ObjectId()
+        body["organizer_username"] = current_user.username
+        body["status"] = "Funding"
+        body["group_id"] = group_id
         new_product = product_model(**body, _id=product_id)
         new_group = group_model(
             product_id=product_id,
-            organizer_id=request.json.get("user_id"),
-            status="Funding",
+            organizer_id=current_user._id,
+            user_id=[current_user._id],
+            _id=group_id
         )
         try:
             new_product.save()
             new_group.save()
 
         except ValidationError as validation_error:
+            print(validation_error)
             raise MongoErrorHandler(
                 validation_error.to_dict(), HTTPStatus.BAD_REQUEST
             ) from validation_error
@@ -121,7 +130,6 @@ class Products(Resource):
         page_number = request.args.get("page")
         query = clean_product_queries(request)
         product_count = len(product_model.objects(**query))
-
         # if no page number is provided then get all the product from the DB
         if page_number is not None:
             # if search query is specified then find product titles that contain that query
@@ -148,8 +156,7 @@ class Products(Resource):
                 "total_count": product_count,
             }
             return json_response, HTTPStatus.ACCEPTED
-
-        products = product_model.objects.all()
+        products = product_model.objects(**query)
         json_response = {
             "data": json.loads(products.to_json()),
             "total_count": product_count,

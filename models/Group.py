@@ -16,7 +16,6 @@ class Announcement(EmbeddedDocument):
     """Announcement Schema"""
 
     _id = ObjectIdField(default=ObjectId, primary_key=True)
-    title = StringField(max_length=75, required=True)
     description = StringField(max_length=250, required=True)
     date = DateField(default=datetime.utcnow)
 
