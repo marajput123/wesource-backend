@@ -4,7 +4,6 @@
 """CRUD REST-API For Product"""
 from http import HTTPStatus
 from datetime import datetime
-from bson.objectid import ObjectId
 from flask import json, Blueprint, request
 from flask_restful import Api, Resource
 from models.Group import Group as group_model
