@@ -193,7 +193,7 @@ class GroupAnnouncement(Resource):
             announcement_id = body["announcementId"]
             new_list = []
             for announcement in group["announcement"]:
-                if str(announcement._id) != str( # pylint: disable-msg=protected-access
+                if str(announcement._id) != str(  # pylint: disable-msg=protected-access
                     announcement_id
                 ):  # pylint: disable-msg=protected-access
                     new_list.append(announcement)
