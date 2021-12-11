@@ -6,7 +6,7 @@ from http import HTTPStatus
 from datetime import datetime
 from flask import json, Blueprint, request
 from flask_restful import Api, Resource
-from models.Group import Group as group_model
+from models.Group import Announcement, Group as group_model
 from models.Product import Product as product_model
 from models.User import User as user_model
 from util.decorators.auth import authenticated
@@ -93,11 +93,16 @@ class Group(Resource):
     @authenticated
     def post(cls, group_id, current_user=None):
         """Add user to the group"""
-        body = request.get_json()
-        group = group_model.get_by_id(group_id)
-        group["user_ids"].append(body["user_id"])
-        group.save()
-        return json.loads(group.to_json()), HTTPStatus.CREATED
+        try:
+            body = request.get_json()
+            group = group_model.get_by_id(group_id)
+            print(body)
+            group["user_id"].append(body["user_id"])
+            group.save()
+            return json.loads(group.to_json()), HTTPStatus.CREATED
+        except Exception as exception:
+            print(exception)
+
 
     # PUT - http://127.0.0.1:5000/api/group/<string:group_id>
     @classmethod
@@ -146,7 +151,6 @@ class GroupQuery(Resource):
     # GET - http://127.0.0.1:5000/api/group/<params>
     @classmethod
     @exception_handler
-    # @authenticated
     def get(cls):
         """GET groups that the user has joined"""
         groups = group_model.objects(user_id=request.args["user_id"])
@@ -156,6 +160,54 @@ class GroupQuery(Resource):
         return {"product_ids": product_ids}, HTTPStatus.OK
 
 
+class GroupAnnouncement(Resource):
+    """CURD for announcements"""
+
+    # POST http://127.0.0.1:5000/api/group/announcement/<string:group_id>
+    @classmethod
+    @exception_handler
+    @authenticated
+    def post(cls, group_id ,current_user=None):
+        """POST announcement to the group"""
+        try:
+            body = request.get_json()
+            group = group_model.objects(_id=group_id)[0]
+            announcement = Announcement(description=body["description"])
+            group["announcement"].append(announcement)
+            group.save()
+            return json.loads(announcement.to_json()), HTTPStatus.CREATED
+        except Exception:
+            return {"message":"failed"}, HTTPStatus.BAD_REQUEST
+
+    # DELETE http://127.0.0.1:5000/api/group/announcement/<string:group_id>
+    @classmethod
+    @exception_handler
+    @authenticated
+    def delete(cls, group_id ,current_user=None):
+        """DELETE announcement from the group"""
+        try:
+            body = request.get_json()
+            print(body)
+            group = group_model.objects(_id=group_id)[0]
+            announcement_id = body["announcementId"]
+            new_list = []
+            for announcement in group["announcement"]:
+                if str(announcement._id) != str(announcement_id):
+                    new_list.append(announcement)
+            group["announcement"] = new_list
+            group.save()
+            return {"message":"delete"}, HTTPStatus.OK
+        except Exception as e:
+            print(e)
+            return {"message":"failed"}, HTTPStatus.BAD_REQUEST
+
+    @classmethod
+    def _convert_to_date(cls, timestamp):
+        date = datetime.fromtimestamp(timestamp / 1000).strftime("%B %d,%Y")
+        return date
+        
+
 api.add_resource(Group, "/api/group/<string:group_id>", endpoint="group_by_id")
 api.add_resource(GroupQuery, "/api/group", endpoint="group")
+api.add_resource(GroupAnnouncement, "/api/group/announcement/<string:group_id>", endpoint="announcements")
 api.add_resource(GroupLanding, "/api/group/landing", endpoint="group_landing")

@@ -1,4 +1,5 @@
 """User Model"""
+from bson.json_util import default
 from bson.objectid import ObjectId
 from mongoengine.base.fields import ObjectIdField
 from mongoengine.document import Document
@@ -20,7 +21,7 @@ class User(Document):
     rating = IntField(default=0)
     productId = ListField(ObjectIdField(db_field="Product"))
     reviewId = ListField(ObjectIdField(db_field="Review"))
-    imageURL = StringField()
+    imageURL = StringField(default="")
 
     @classmethod
     def get_by_username(cls, username):
