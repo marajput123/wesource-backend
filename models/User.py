@@ -20,7 +20,7 @@ class User(Document):
     rating = IntField(default=0)
     productId = ListField(ObjectIdField(db_field="Product"))
     reviewId = ListField(ObjectIdField(db_field="Review"))
-    imageURL = StringField()
+    imageURL = StringField(default="")
 
     @classmethod
     def get_by_username(cls, username):
