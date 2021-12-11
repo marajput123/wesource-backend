@@ -149,7 +149,6 @@ class GroupAnnouncement(Resource):
     def post(cls, group_id, current_user=None):
 
         """A post request that updates the list of group announcement"""
-        print(current_user["_id"])
         body = request.get_json()
         new_announcement = group_model.create_new_announcement(body)
         group = group_model.get_by_id(group_id)
