@@ -8,11 +8,9 @@
         ],
         "announcement": [
             {
-                "title": "Announcement #1",
                 "description": "Hello World"
             },
             {
-                "title": "Announcement #2",
                 "description": "Hello World2"
             }
         ]
@@ -26,11 +24,9 @@
         ],
         "announcement": [
             {
-                "title": "Announcement #1",
                 "description": "Hello World"
             },
             {
-                "title": "Announcement #2",
                 "description": "Hello World2"
             }
         ]

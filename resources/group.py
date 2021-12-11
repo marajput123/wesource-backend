@@ -4,6 +4,7 @@
 """CRUD REST-API For Product"""
 from http import HTTPStatus
 from datetime import datetime
+from bson.objectid import ObjectId
 from flask import json, Blueprint, request
 from flask_restful import Api, Resource
 from models.Group import Group as group_model
@@ -139,7 +140,35 @@ class GroupLanding(Resource):
         return json.loads(products.to_json()), HTTPStatus.OK
 
 
+class GroupAnnouncement(Resource):
+    """CRUD for posting announcement messages"""
+
+    # POST - http://127.0.0.1:5000/api/group/announcement/<string:group_id>
+    @classmethod
+    @authenticated
+    @exception_handler
+    def post(cls, group_id, current_user=None):
+
+        """A post request that updates the list of group announcement"""
+        print(current_user["_id"])
+        body = request.get_json()
+        new_announcement = group_model.create_new_announcement(body)
+        group = group_model.get_by_id(group_id)
+        if current_user["_id"] != group["organizer_id"]:
+            return (
+                "You are not the organizer can not make an announcement",
+                HTTPStatus.BAD_REQUEST,
+            )
+        group["announcement"].append(new_announcement)
+        group.save()
+        return json.loads(group.to_json()), HTTPStatus.CREATED
+
+
 api.add_resource(Group, "/api/group/<string:group_id>", endpoint="group_by_id")
 api.add_resource(Group, "/api/group", endpoint="group")
-# api.add_resource(GroupInfo, "/api/group-info/<string:group_id>", endpoint="group_info")
+api.add_resource(
+    GroupAnnouncement,
+    "/api/group/announcement/<string:group_id>",
+    endpoint="group_announcement",
+)
 api.add_resource(GroupLanding, "/api/group/landing", endpoint="group_landing")
