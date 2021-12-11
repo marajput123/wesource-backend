@@ -16,6 +16,7 @@ class Announcement(EmbeddedDocument):
     """Announcement Schema"""
 
     _id = ObjectIdField(default=ObjectId, primary_key=True)
+    title = StringField(max_length=75, required=True)
     description = StringField(max_length=250, required=True)
     date = DateField(default=datetime.utcnow)
 
@@ -27,7 +28,7 @@ class Group(Document):
     product_id = ObjectIdField(db_field="Product", required=True)
     organizer_id = ObjectIdField(db_field="Organizer", required=True)
     user_id = ListField(ObjectIdField(db_field="User", required=True))
-    announcement = EmbeddedDocumentListField(Announcement)
+    announcement = EmbeddedDocumentListField("Announcement")
 
     @classmethod
     def get_by_id(cls, group_id):
